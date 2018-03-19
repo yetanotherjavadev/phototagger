@@ -57,7 +57,7 @@ public class AttachmentListCell extends ListCell<String> {
                     tempFile = File.createTempFile("icon", ext);
                     jswingIcon = getJSwingIconFromFileSystem(tempFile);
                 } catch (IOException ignored) {
-                    // Cannot create temporary file.
+                    System.out.println("Cannot create temporary file: icon." + ext);
                 } finally {
                     if (tempFile != null) tempFile.delete();
                 }

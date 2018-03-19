@@ -6,16 +6,16 @@ import java.util.List;
 
 public class FilesManager {
 
-    public static final String SEARCH_PATH = "d:\\Repos\\phototagger\\resources\\test\\";
+    private static final String SEARCH_PATH = "src/main/resources/test";
 
     public List<String> getFiles() {
         List<String> result = new ArrayList<>();
+
         File f = new File(SEARCH_PATH);
 
         if (f.exists()) {
             result.addAll(getFilesInternal(f));
         }
-
         return result;
     }
 
