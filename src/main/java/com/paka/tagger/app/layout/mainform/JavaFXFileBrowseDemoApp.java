@@ -1,16 +1,17 @@
-package com.paka.tagger.widgets.filebrowser;
+package com.paka.tagger.app.layout.mainform;
 
 import com.paka.tagger.common.graphics.IconProvider;
+import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
+import com.paka.tagger.widgets.filebrowser.items.PathItem;
+import com.paka.tagger.widgets.renderingarea.RenderingArea;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,7 +25,11 @@ import static com.paka.tagger.common.constants.Icons.FOLDER_EXPAND_ICON_PATH;
 
 public class JavaFXFileBrowseDemoApp extends Application {
 
+	private static final String WINDOW_TITLE = "JavaFX File Browse Demo";
+
 	private TreeView<PathItem> treeView;
+	private BorderPane mainPane = new BorderPane();
+	private StackPane root = new StackPane();
 
 	/**
 	 * @param args the command line arguments
@@ -35,16 +40,45 @@ public class JavaFXFileBrowseDemoApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+
+		//setup and show the window
+		primaryStage.setTitle(WINDOW_TITLE);
+
+		setupLayout();
+
+		root.getChildren().add(mainPane);
+
+		primaryStage.setScene(new Scene(root, 800, 600));
+		primaryStage.show();
+	}
+
+	private void setupLayout() {
+		mainPane.setPadding(new Insets(10, 10, 10, 10));
+
+		mainPane.setLeft(createTree());
+		mainPane.setCenter(getRenderingArea());
+		mainPane.setRight(createInfoBox());
+	}
+
+	private VBox createInfoBox() {
+		VBox treeBox = new VBox();
+		treeBox.setPadding(new Insets(10, 10, 10, 10));
+		treeBox.setSpacing(10);
+		VBox.setVgrow(treeView, Priority.ALWAYS);
+		return treeBox;
+	}
+
+	private VBox createTree() {
 		//create tree pane
 		VBox treeBox = new VBox();
 		treeBox.setPadding(new Insets(10, 10, 10, 10));
 		treeBox.setSpacing(10);
-		//setup the file browser root
-		String hostName = "computer";
+
+		String hostName = "Computer"; // local computer "name"
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException x) {
-			System.out.println("Something went wrong");
+			System.out.println("Something went wrong, leaving default host name");
 		}
 
 		PathItem rootItem = new PathItem(hostName, hostName);
@@ -61,15 +95,17 @@ public class JavaFXFileBrowseDemoApp extends Application {
 
 		addHandlers();
 
-		treeBox.getChildren().addAll(new Label("File browser"), treeView);
+		treeBox.getChildren().add(treeView);
 		VBox.setVgrow(treeView, Priority.ALWAYS);
 
-		//setup and show the window
-		primaryStage.setTitle("JavaFX File Browse Demo");
-		StackPane root = new StackPane();
-		root.getChildren().addAll(treeBox);
-		primaryStage.setScene(new Scene(root, 400, 300));
-		primaryStage.show();
+		return treeBox;
+	}
+
+	private RenderingArea getRenderingArea() {
+		RenderingArea renderingArea = new RenderingArea();
+		renderingArea.setBackground(new Background(new BackgroundFill(new Color(.7d,.7d,.7d,1d),
+				new CornerRadii(4d), new Insets(10,10,10,10))));
+		return renderingArea;
 	}
 
 	private void addHandlers() {

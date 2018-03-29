@@ -1,4 +1,4 @@
-package com.paka.tagger.widgets.filebrowser;
+package com.paka.tagger.widgets.filebrowser.items;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

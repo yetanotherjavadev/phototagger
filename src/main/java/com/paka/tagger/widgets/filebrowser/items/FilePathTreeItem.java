@@ -1,4 +1,4 @@
-package com.paka.tagger.widgets.filebrowser;
+package com.paka.tagger.widgets.filebrowser.items;
 
 import com.paka.tagger.common.graphics.IconProvider;
 import javafx.scene.Node;
@@ -26,7 +26,7 @@ public class FilePathTreeItem extends TreeItem<PathItem> {
 			this.setGraphic(new ImageView(IconProvider.getImage(FOLDER_COLLAPSE_ICON_PATH)));
 		} else {
 			this.setGraphic(new ImageView(IconProvider.getImage(FILE_ICON_PATH)));
-			//TODO: different icons for different files
+			//TODO: add different icons for different file types
 		}
 	}
 }

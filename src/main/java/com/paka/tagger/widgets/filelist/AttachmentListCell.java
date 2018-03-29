@@ -1,4 +1,4 @@
-package com.paka.tagger.widgets;
+package com.paka.tagger.widgets.filelist;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ListCell;

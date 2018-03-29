@@ -1,7 +1,7 @@
 package com.paka.tagger.app;
 
 import com.paka.tagger.files.FilesManager;
-import com.paka.tagger.widgets.AttachmentListCell;
+import com.paka.tagger.widgets.filelist.AttachmentListCell;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
