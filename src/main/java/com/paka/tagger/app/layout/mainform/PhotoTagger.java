@@ -16,7 +16,6 @@ public class PhotoTagger extends Application {
     public void start(Stage primaryStage) {
 
         MainLayoutController mlc = new MainLayoutController();
-        mlc.init();
 
         Scene scene = new Scene(mlc.getRoot(), 800, 600);
 

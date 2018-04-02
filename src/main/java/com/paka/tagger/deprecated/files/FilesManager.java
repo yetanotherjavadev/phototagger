@@ -1,4 +1,4 @@
-package com.paka.tagger.files;
+package com.paka.tagger.deprecated.files;
 
 import java.io.File;
 import java.util.ArrayList;

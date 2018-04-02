@@ -1,6 +1,6 @@
 package com.paka.tagger;
 
-import com.paka.tagger.files.FilesManager;
+import com.paka.tagger.deprecated.files.FilesManager;
 import org.junit.Assert;
 import org.junit.Test;
 

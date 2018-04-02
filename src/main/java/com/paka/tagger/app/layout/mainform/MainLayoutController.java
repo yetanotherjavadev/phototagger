@@ -1,35 +1,27 @@
 package com.paka.tagger.app.layout.mainform;
 
-import static com.paka.tagger.common.constants.IconPaths.COMPUTER_ICON_PATH;
-import static com.paka.tagger.common.constants.IconPaths.FOLDER_EXPAND_ICON_PATH;
-
 import com.paka.tagger.common.graphics.IconProvider;
 import com.paka.tagger.config.MainAppConfig;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import com.paka.tagger.widgets.renderingarea.RenderingArea;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+
+import static com.paka.tagger.common.constants.IconPaths.COMPUTER_ICON_PATH;
+import static com.paka.tagger.common.constants.IconPaths.FOLDER_EXPAND_ICON_PATH;
 
 public class MainLayoutController {
 
@@ -46,6 +38,8 @@ public class MainLayoutController {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+
+        init();
     }
 
     public StackPane getRoot() {
@@ -59,9 +53,11 @@ public class MainLayoutController {
     }
 
     private void initLayouts() {
-        renderingArea.setBackground(new Background(new BackgroundFill(new Color(.7d, .7d, .7d, 1d),
-                new CornerRadii(4d), new Insets(10, 10, 10, 10))));
+        initTree();
+        initCentralArea();
+    }
 
+    private void initTree() {
         String hostName = "Computer"; // local computer "name"
         try {
             hostName = InetAddress.getLocalHost().getHostName();
@@ -80,9 +76,12 @@ public class MainLayoutController {
         rootNode.setExpanded(true);
         treeView.setRoot(rootNode);
 
-        addHandlers();
-
         VBox.setVgrow(treeView, Priority.ALWAYS);
+    }
+
+    private void initCentralArea() {
+        renderingArea.setBackground(new Background(new BackgroundFill(new Color(.7d, .7d, .7d, 1d),
+                new CornerRadii(4d), new Insets(10, 10, 10, 10))));
     }
 
     private void addHandlers() {

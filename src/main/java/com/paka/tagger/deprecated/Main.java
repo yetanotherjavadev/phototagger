@@ -1,6 +1,6 @@
 package com.paka.tagger.deprecated;
 
-import com.paka.tagger.files.FilesManager;
+import com.paka.tagger.deprecated.files.FilesManager;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
