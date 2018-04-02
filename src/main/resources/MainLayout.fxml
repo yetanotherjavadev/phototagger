@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.paka.tagger.widgets.renderingarea.RenderingArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml">
+    <BorderPane>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+
+        <left>
+            <VBox>
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                </padding>
+                <spacing>10.0d</spacing>
+
+                <TreeView fx:id="treeView">
+                </TreeView>
+            </VBox>
+        </left>
+        <center>
+            <RenderingArea fx:id="renderingArea">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                </padding>
+            </RenderingArea>
+        </center>
+        <right>
+            <VBox>
+                <Label text="I'm a right label">
+                </Label>
+            </VBox>
+        </right>
+        <bottom>
+            <Label text="I'm a bottom label">
+            </Label>
+        </bottom>
+    </BorderPane>
+</StackPane>

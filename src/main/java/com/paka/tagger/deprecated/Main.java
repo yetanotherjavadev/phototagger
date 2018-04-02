@@ -1,7 +1,6 @@
-package com.paka.tagger.app;
+package com.paka.tagger.deprecated;
 
 import com.paka.tagger.files.FilesManager;
-import com.paka.tagger.widgets.filelist.AttachmentListCell;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +28,7 @@ public class Main extends Application {
 
         list.setItems(data);
 
-        list.setCellFactory(list -> new AttachmentListCell());
+//        list.setCellFactory(list -> new AttachmentListCell());
 
         stage.show();
     }
