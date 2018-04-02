@@ -19,6 +19,12 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
+				<resources>
+				<resource>
+					<directory>src/main/resources</directory>
+					<filtering>true</filtering>
+				</resource>
+				</resources>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -29,7 +35,13 @@
 							<forceJavacCompilerUse>true</forceJavacCompilerUse>
 							<source>1.8</source>
 							<target>1.8</target>
-
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<webXml>src\main\resources\WEB-INF\web.xml</webXml>
 						</configuration>
 					</plugin>
 				</plugins>

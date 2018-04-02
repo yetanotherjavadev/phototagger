@@ -18,7 +18,7 @@ public class PathItem {
 		this.fullPath = Paths.get(fullPath);
 	}
 
-	@Override
+	@Override //TODO fix
 	public String toString() {
 		return displayPath;
 	}
