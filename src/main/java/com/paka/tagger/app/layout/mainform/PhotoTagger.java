@@ -1,6 +1,7 @@
 package com.paka.tagger.app.layout.mainform;
 
 import javafx.application.Application;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -17,10 +18,13 @@ public class PhotoTagger extends Application {
 
         MainLayoutController mlc = new MainLayoutController();
 
-        Scene scene = new Scene(mlc.getRoot(), 800, 600);
+        Scene scene = new Scene(mlc.getRoot(), 1000, 600);
 
         primaryStage.setTitle(WINDOW_TITLE);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        primaryStage.setMaxWidth(1000);
+        primaryStage.setMinWidth(800);
     }
 }

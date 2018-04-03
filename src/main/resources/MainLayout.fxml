@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import com.paka.tagger.widgets.filebrowser.FileBrowser?>
+<?import com.paka.tagger.widgets.infopanel.InfoPanel?>
 <StackPane xmlns:fx="http://javafx.com/fxml">
     <BorderPane>
         <padding>
@@ -34,10 +35,9 @@
             </RenderingArea>
         </center>
         <right>
-            <VBox>
-                <Label text="I'm a right label">
-                </Label>
-            </VBox>
+            <InfoPanel fx:id="infoPanel">
+
+            </InfoPanel>
         </right>
         <bottom>
             <Label text="I'm a bottom label">

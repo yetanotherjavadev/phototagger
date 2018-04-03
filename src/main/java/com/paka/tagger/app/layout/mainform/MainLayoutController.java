@@ -1,6 +1,7 @@
 package com.paka.tagger.app.layout.mainform;
 
 import com.paka.tagger.widgets.filebrowser.FileBrowser;
+import com.paka.tagger.widgets.infopanel.InfoPanel;
 import com.paka.tagger.widgets.renderingarea.RenderingArea;
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -16,6 +17,8 @@ public class MainLayoutController {
 
     @FXML private FileBrowser fileBrowser;
     @FXML private RenderingArea renderingArea;
+    @FXML private InfoPanel infoPanel;
+
     @FXML public StackPane root;
 
     public MainLayoutController() {
@@ -31,18 +34,23 @@ public class MainLayoutController {
         init();
     }
 
-    public StackPane getRoot() {
-        return root;
-    }
-
     @FXML
     private void init() {
         initLayouts();
     }
 
+    public StackPane getRoot() {
+        return root;
+    }
+
     private void initLayouts() {
+        initFileBrowser();
         initCentralArea();
-        initTree();
+        initInfoPanel();
+    }
+
+    private void initInfoPanel() {
+        System.out.println("info panel initialized");
     }
 
     private void initCentralArea() {
@@ -50,10 +58,11 @@ public class MainLayoutController {
                 new CornerRadii(4d), new Insets(10, 10, 10, 10))));
     }
 
-    private void initTree() {
+    private void initFileBrowser() {
         fileBrowser.setImgClickCallBack(param -> {
             System.out.println("clicked on supported file: " + param.toString());
             renderingArea.setImage(param.toString());
+            infoPanel.showDataFor(param.toString());
             return null;
         });
     }
