@@ -9,9 +9,8 @@ public class FileUtils {
         String ext = ".";
         int p = filename.lastIndexOf('.');
         if (p >= 0) {
-            ext = filename.substring(p);
+            ext = filename.substring(p + 1);
         }
         return ext.toLowerCase();
     }
-
 }

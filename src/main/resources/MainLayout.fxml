@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import com.paka.tagger.widgets.filebrowser.FileBrowser?>
 <StackPane xmlns:fx="http://javafx.com/fxml">
     <BorderPane>
         <padding>
@@ -21,8 +22,8 @@
                 </padding>
                 <spacing>10.0d</spacing>
 
-                <TreeView fx:id="treeView">
-                </TreeView>
+                <FileBrowser fx:id="fileBrowser">
+                </FileBrowser>
             </VBox>
         </left>
         <center>

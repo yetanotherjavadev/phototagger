@@ -21,7 +21,7 @@ public class MainAppConfig {
     }
 
     public static boolean isPathSupported(Path path) {
-        String ext = FileUtils.getFileExt(path.toString());
+        String ext = FileUtils.getFileExt(path.toString()).toUpperCase();
         return isExtSupported(ext);
     }
 }
