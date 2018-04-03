@@ -10,6 +10,7 @@
 
 <?import com.paka.tagger.widgets.filebrowser.FileBrowser?>
 <?import com.paka.tagger.widgets.infopanel.InfoPanel?>
+<?import com.paka.tagger.widgets.tagspanel.TagsPanel?>
 <StackPane xmlns:fx="http://javafx.com/fxml">
     <BorderPane>
         <padding>
@@ -40,8 +41,10 @@
             </InfoPanel>
         </right>
         <bottom>
-            <Label text="I'm a bottom label">
-            </Label>
+            <VBox>
+                <Label text="Tags: "/>
+                <TagsPanel fx:id="tagsPanel"/>
+            </VBox>
         </bottom>
     </BorderPane>
 </StackPane>

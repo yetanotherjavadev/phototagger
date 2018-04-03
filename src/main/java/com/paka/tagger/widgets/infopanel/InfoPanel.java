@@ -23,7 +23,7 @@ public class InfoPanel extends VBox {
 
     public InfoPanel() {
         setPadding(new Insets(10, 10, 10, 10));
-        setWidth(300);
+        setWidth(200);
         init();
         this.getChildren().addAll(dateLabel,
                 makeLabel,

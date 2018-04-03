@@ -3,6 +3,7 @@ package com.paka.tagger.app.layout.mainform;
 import com.paka.tagger.widgets.filebrowser.FileBrowser;
 import com.paka.tagger.widgets.infopanel.InfoPanel;
 import com.paka.tagger.widgets.renderingarea.RenderingArea;
+import com.paka.tagger.widgets.tagspanel.TagsPanel;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ public class MainLayoutController {
     @FXML private FileBrowser fileBrowser;
     @FXML private RenderingArea renderingArea;
     @FXML private InfoPanel infoPanel;
+    @FXML private TagsPanel tagsPanel;
 
     @FXML public StackPane root;
 
@@ -47,6 +49,11 @@ public class MainLayoutController {
         initFileBrowser();
         initCentralArea();
         initInfoPanel();
+        initTagsPanel();
+    }
+
+    private void initTagsPanel() {
+        tagsPanel.setTags(null);
     }
 
     private void initInfoPanel() {
