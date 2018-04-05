@@ -1,26 +1,24 @@
 package com.paka.tagger.widgets.filebrowser;
 
-import static com.paka.tagger.common.constants.IconPaths.COMPUTER_ICON_PATH;
-import static com.paka.tagger.common.constants.IconPaths.FOLDER_EXPAND_ICON_PATH;
-
 import com.paka.tagger.common.graphics.IconProvider;
 import com.paka.tagger.config.MainAppConfig;
+import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.*;
+
+import static com.paka.tagger.common.constants.IconPaths.COMPUTER_ICON_PATH;
+import static com.paka.tagger.common.constants.IconPaths.FOLDER_EXPAND_ICON_PATH;
 
 public class FileBrowser extends TreeView<PathItem> {
 
@@ -66,11 +64,10 @@ public class FileBrowser extends TreeView<PathItem> {
             try {
                 if (isDirectory) {
                     if (source.getChildren().isEmpty()) { //happens on first dir opening
-                        Path path = Paths.get(source.getValue().getDisplayPath());
-                        DirectoryStream<Path> dir = Files.newDirectoryStream(path);
+                        DirectoryStream<Path> dir = Files.newDirectoryStream(source.getValue().getFullPath());
                         for (Path file : dir) {
                             if (file.toFile().isDirectory() || isExtSupported(file)) {
-                                FilePathTreeItem treeNode = new FilePathTreeItem(new PathItem(file.toString(), file));
+                                FilePathTreeItem treeNode = new FilePathTreeItem(new PathItem(FileUtils.getFileName(file), file));
                                 source.getChildren().add(treeNode);
                             }
                         }

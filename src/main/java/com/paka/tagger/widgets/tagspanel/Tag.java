@@ -11,11 +11,10 @@ public class Tag extends Label {
     public Tag(FlowPane parent, String text) {
         this.parent = parent;
         this.text = text;
+        //TODO: add "tagish" styling
 //        this.getStyleClass().add();
         addClickHandler();
     }
-
-
 
     private void addClickHandler() {
         System.out.println("Tag was removed: " + text);
