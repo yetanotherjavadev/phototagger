@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 public class MainLayoutController extends StackPane {
 
@@ -46,16 +47,24 @@ public class MainLayoutController extends StackPane {
     }
 
     private void initLayouts() {
+        initMenu();
         initFileBrowser();
         initCentralArea();
         initInfoPanel();
         initTagsPanel();
     }
 
+    private void initMenu() {
+        mainMenu.setScanCallback(new Callback<String, String>() {
+            @Override
+            public String call(String param) {
+                return null;
+            }
+        });
+    }
+
     private void initTagsPanel() {
         tagsPanel.setTags(null);
-//        tagsPanel.getStyleClass().add("tagsPanel");
-        tagsPanel.setStyle("-fx-color:blue");
     }
 
     private void initInfoPanel() {

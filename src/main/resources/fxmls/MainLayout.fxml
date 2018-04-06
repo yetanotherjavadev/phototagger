@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.paka.tagger.app.layout.menu.MainMenuBarController?>
+<?import com.paka.tagger.widgets.filebrowser.FileBrowser?>
+<?import com.paka.tagger.widgets.infopanel.InfoPanel?>
+<?import com.paka.tagger.widgets.renderingarea.RenderingArea?>
+<?import com.paka.tagger.widgets.tagspanel.TagsPanel?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<fx:root type="StackPane" xmlns:fx="http://javafx.com/fxml">
+    <BorderPane fx:id="mainPane">
+        <top>
+            <MainMenuBarController fx:id="mainMenu">
+            </MainMenuBarController>
+        </top>
+        <left>
+            <VBox>
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                </padding>
+                <spacing>10.0d</spacing>
+                <FileBrowser fx:id="fileBrowser">
+                </FileBrowser>
+            </VBox>
+        </left>
+        <center>
+            <RenderingArea fx:id="renderingArea">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                </padding>
+            </RenderingArea>
+        </center>
+        <right>
+            <InfoPanel fx:id="infoPanel">
+            </InfoPanel>
+        </right>
+        <bottom>
+            <VBox>
+                <Label text="Tags: "/>
+                <TagsPanel fx:id="tagsPanel"/>
+            </VBox>
+        </bottom>
+    </BorderPane>
+</fx:root>
