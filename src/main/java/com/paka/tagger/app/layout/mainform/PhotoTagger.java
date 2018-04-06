@@ -16,15 +16,18 @@ public class PhotoTagger extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        MainLayoutController mlc = new MainLayoutController();
-
-        Scene scene = new Scene(mlc.getRoot(), 1000, 600);
-
         primaryStage.setTitle(WINDOW_TITLE);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(createScene());
         primaryStage.show();
+        //TODO: create "rubber" layout
+        primaryStage.setResizable(false);
 
-        primaryStage.setMaxWidth(1000);
-        primaryStage.setMinWidth(800);
+    }
+
+    private Scene createScene() {
+        MainLayoutController mlc = new MainLayoutController();
+        Scene scene = new Scene(mlc, 1280, 720);
+        scene.getStylesheets().add("/css/mainlayout.css");
+        return scene;
     }
 }

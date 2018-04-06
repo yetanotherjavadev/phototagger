@@ -1,5 +1,6 @@
 package com.paka.tagger.app.layout.mainform;
 
+import com.paka.tagger.app.layout.menu.MainMenuBarController;
 import com.paka.tagger.widgets.filebrowser.FileBrowser;
 import com.paka.tagger.widgets.infopanel.InfoPanel;
 import com.paka.tagger.widgets.renderingarea.RenderingArea;
@@ -10,25 +11,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-public class MainLayoutController {
+public class MainLayoutController extends StackPane {
 
+    @FXML private MainMenuBarController mainMenu;
+    @FXML private BorderPane mainPane;
     @FXML private FileBrowser fileBrowser;
     @FXML private RenderingArea renderingArea;
     @FXML private InfoPanel infoPanel;
     @FXML private TagsPanel tagsPanel;
 
-    @FXML public StackPane root;
-
     public MainLayoutController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainLayout.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/MainLayout.fxml"));
         fxmlLoader.setController(this);
+        fxmlLoader.setRoot(this);
 
         try {
-            root = fxmlLoader.load();
+            fxmlLoader.load();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -39,10 +42,7 @@ public class MainLayoutController {
     @FXML
     private void init() {
         initLayouts();
-    }
-
-    public StackPane getRoot() {
-        return root;
+        mainPane.getStyleClass().add("mainPane");
     }
 
     private void initLayouts() {
@@ -54,6 +54,8 @@ public class MainLayoutController {
 
     private void initTagsPanel() {
         tagsPanel.setTags(null);
+//        tagsPanel.getStyleClass().add("tagsPanel");
+        tagsPanel.setStyle("-fx-color:blue");
     }
 
     private void initInfoPanel() {

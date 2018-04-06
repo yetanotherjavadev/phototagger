@@ -1,0 +1,15 @@
+.mainPane {
+    /*-fx-border: 1px solid gray;*/
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
+    -fx-border-color: red;
+}
+
+.tagsPanel {
+}
+
+.tag {
+    -fx-color-label-visible: white;
+    -fx-background-color: blue;
+    -fx-font-size: 14px;
+}

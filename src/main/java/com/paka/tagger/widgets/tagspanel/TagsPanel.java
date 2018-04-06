@@ -14,6 +14,8 @@ public class TagsPanel extends FlowPane {
     public void setTags(List<Tag> tags) {
         if (tags == null) tags = getDefaultTags();
         this.tags = tags;
+        setPrefHeight(100);
+        setMaxHeight(100);
         render();
     }
 
