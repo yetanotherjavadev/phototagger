@@ -1,38 +1,45 @@
 package com.paka.tagger.widgets.renderingarea;
 
+import com.paka.tagger.state.AppState;
 import java.io.File;
-import javafx.geometry.Rectangle2D;
+import java.io.IOException;
+import javafx.beans.binding.Bindings;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 
 public class RenderingArea extends FlowPane {
 
-    // image that is currently displayed
+    @FXML // image that is currently displayed
     private ImageView imageView;
-    private final double IMG_WIDTH = 400;
-    private final double IMG_HEIGHT = 300;
 
-    public RenderingArea() {
-        createChildren();
+    @FXML // current path
+    private Label currentlySelectedLabel;
+
+    public RenderingArea() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/RenderingArea.fxml"));
+        fxmlLoader.setController(this);
+        fxmlLoader.setRoot(this);
+        fxmlLoader.load();
     }
 
-    //TODO move to fxml
-    private void createChildren() {
-        this.imageView = new ImageView();
-
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(IMG_WIDTH);
-        imageView.setFitHeight(IMG_HEIGHT);
-        imageView.setViewport(new Rectangle2D(0,0,IMG_WIDTH,IMG_HEIGHT));
-
-        getChildren().add(imageView);
+    @FXML
+    public void init() {
         setImage("d:/!images/tomcat.png");
+        bindAll();
+    }
+
+    private void bindAll() { //how do I get real observable here?
+        currentlySelectedLabel.textProperty().bind(Bindings.concat(AppState.get().getSelectedItem().getValue().getValue().getFullPath()));
+
     }
 
     public void setImage(String url) {
         File file = new File(url);
-        Image image = new Image(file.toURI().toString(), IMG_WIDTH, IMG_HEIGHT, true, false);
+        Image image = new Image(file.toURI().toString(), 400, 300, true, false);
         imageView.setImage(image);
     }
 }

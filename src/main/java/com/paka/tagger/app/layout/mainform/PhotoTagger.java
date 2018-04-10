@@ -1,7 +1,6 @@
 package com.paka.tagger.app.layout.mainform;
 
 import javafx.application.Application;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -21,7 +20,6 @@ public class PhotoTagger extends Application {
         primaryStage.show();
         //TODO: create "rubber" layout
         primaryStage.setResizable(false);
-
     }
 
     private Scene createScene() {
