@@ -1,9 +1,11 @@
 package com.paka.tagger.widgets.renderingarea;
 
 import com.paka.tagger.state.AppState;
+import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import java.io.File;
 import java.io.IOException;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -13,11 +15,14 @@ import javafx.scene.layout.FlowPane;
 
 public class RenderingArea extends FlowPane {
 
+    private static final double IMG_WIDTH = 760;
+    private static final double IMG_HEIGHT = 560;
+
     @FXML // image that is currently displayed
     private ImageView imageView;
 
     @FXML // current path
-    private Label currentlySelectedLabel;
+    private Label selectedItemLabel;
 
     public RenderingArea() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/RenderingArea.fxml"));
@@ -27,19 +32,23 @@ public class RenderingArea extends FlowPane {
     }
 
     @FXML
-    public void init() {
-        setImage("d:/!images/tomcat.png");
+    public void initialize() {
         bindAll();
     }
 
-    private void bindAll() { //how do I get real observable here?
-        currentlySelectedLabel.textProperty().bind(Bindings.concat(AppState.get().getSelectedItem().getValue().getValue().getFullPath()));
+    private void bindAll() {
+        SimpleObjectProperty<PathItem> selected = AppState.get().getSelectedItem();
 
+        selectedItemLabel.textProperty().bind(Bindings.createStringBinding(
+                () -> selected.isNull().get() ? "null" : selected.get().getFullPath().toString(), selected));
+
+        imageView.imageProperty().bind(Bindings.createObjectBinding(
+                () -> getImageFrom(selected), selected));
     }
 
-    public void setImage(String url) {
-        File file = new File(url);
-        Image image = new Image(file.toURI().toString(), 400, 300, true, false);
-        imageView.setImage(image);
+    private Image getImageFrom(SimpleObjectProperty<PathItem> selected) {
+        if (selected.isNull().get()) return null;
+        File file = selected.getValue().getFullPath().toFile();
+        return new Image(file.toURI().toString(), IMG_WIDTH, IMG_HEIGHT, true, false);
     }
 }

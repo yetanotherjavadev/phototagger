@@ -48,19 +48,14 @@ public class MainLayoutController extends StackPane {
 
     private void initLayouts() {
         initMenu();
-        initFileBrowser();
         initCentralArea();
         initInfoPanel();
         initTagsPanel();
     }
 
     private void initMenu() {
-        mainMenu.setScanCallback(new Callback<String, String>() {
-            @Override
-            public String call(String param) {
-                return null;
-            }
-        });
+        //should scan directories for images
+        mainMenu.setScanCallback(param -> null);
     }
 
     private void initTagsPanel() {
@@ -74,14 +69,5 @@ public class MainLayoutController extends StackPane {
     private void initCentralArea() {
         renderingArea.setBackground(new Background(new BackgroundFill(new Color(.7d, .7d, .7d, 1d),
                 new CornerRadii(4d), new Insets(10, 10, 10, 10))));
-    }
-
-    private void initFileBrowser() {
-        fileBrowser.setImgClickCallBack(param -> {
-            System.out.println("clicked on supported file: " + param.toString());
-            renderingArea.setImage(param.toString());
-            infoPanel.showDataFor(param.toString());
-            return null;
-        });
     }
 }

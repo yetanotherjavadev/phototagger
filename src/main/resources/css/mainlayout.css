@@ -2,7 +2,7 @@
     /*-fx-border: 1px solid gray;*/
     -fx-border-style: solid;
     -fx-border-width: 3px;
-    -fx-border-color: red;
+    -fx-border-color: darkgray;
 }
 
 .tagsPanel {

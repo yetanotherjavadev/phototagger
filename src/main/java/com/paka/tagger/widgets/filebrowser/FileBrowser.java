@@ -2,6 +2,7 @@ package com.paka.tagger.widgets.filebrowser;
 
 import com.paka.tagger.common.graphics.IconProvider;
 import com.paka.tagger.config.MainAppConfig;
+import com.paka.tagger.state.AppState;
 import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
@@ -21,8 +22,6 @@ import static com.paka.tagger.common.constants.IconPaths.COMPUTER_ICON_PATH;
 import static com.paka.tagger.common.constants.IconPaths.FOLDER_EXPAND_ICON_PATH;
 
 public class FileBrowser extends TreeView<PathItem> {
-
-    private Callback<Path, Void> imgClickCallBack;
 
     public FileBrowser() {
         initTree();
@@ -55,6 +54,7 @@ public class FileBrowser extends TreeView<PathItem> {
 
     private void addHandlers() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Clicked on selected item: " + newValue.getValue().getFullPath());
             TreeItem<PathItem> source = observable.getValue();
             boolean isDirectory = source.getValue().getFullPath().toFile().isDirectory();
             if (isDirectory && source.isExpanded()) {
@@ -73,7 +73,7 @@ public class FileBrowser extends TreeView<PathItem> {
                         }
                     }
                 } else { //TODO: implement rescanning a directory for changes this would be the place to do it
-                    imgClickCallBack.call(source.getValue().getFullPath());
+                    AppState.get().setSelectedItem(source.getValue());
                 }
             } catch (IOException x) {
                 x.printStackTrace();
@@ -83,9 +83,5 @@ public class FileBrowser extends TreeView<PathItem> {
 
     private boolean isExtSupported(Path path) {
         return MainAppConfig.isPathSupported(path);
-    }
-
-    public void setImgClickCallBack(Callback<Path, Void> callBack) {
-        this.imgClickCallBack = callBack;
     }
 }

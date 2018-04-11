@@ -1,7 +1,9 @@
 package com.paka.tagger.widgets.infopanel;
 
 import com.paka.tagger.common.model.ImageMetadata;
+import com.paka.tagger.state.AppState;
 import com.paka.tagger.utils.ImageUtils;
+import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javafx.geometry.Insets;
@@ -24,6 +26,7 @@ public class InfoPanel extends VBox {
     public InfoPanel() {
         setPadding(new Insets(10, 10, 10, 10));
         setWidth(200);
+        setMaxWidth(200);
         init();
         this.getChildren().addAll(dateLabel,
                 makeLabel,
@@ -33,6 +36,13 @@ public class InfoPanel extends VBox {
                 focalLengthLabel,
                 isoSpeedLabel,
                 flashLabel);
+
+        bind();
+    }
+
+
+    private void bind() {
+        AppState.get().getSelectedItem().addListener((observable, oldValue, newValue) -> showDataForBind(newValue));
     }
 
     private void init() {
@@ -62,9 +72,10 @@ public class InfoPanel extends VBox {
         flashLabel.setValue(String.valueOf(imageMetadata.isFlash()));
     }
 
-    public void showDataFor(String path) {
+    private void showDataForBind(PathItem path) {
+        if (path == null) return;
         try {
-            Path aPath = Paths.get(path);
+            Path aPath = Paths.get(path.getFullPath().toString());
             setData(ImageUtils.getImageMetadata(aPath));
         } catch (Exception e) {
             System.out.println("Something went wrong: " + e);
