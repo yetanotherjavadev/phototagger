@@ -4,8 +4,6 @@ import com.paka.tagger.state.AppState;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import java.io.File;
 import java.io.IOException;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -33,22 +31,19 @@ public class RenderingArea extends FlowPane {
 
     @FXML
     public void initialize() {
-        bindAll();
+        bind();
     }
 
-    private void bindAll() {
-        SimpleObjectProperty<PathItem> selected = AppState.get().getSelectedItem();
-
-        selectedItemLabel.textProperty().bind(Bindings.createStringBinding(
-                () -> selected.isNull().get() ? "null" : selected.get().getFullPath().toString(), selected));
-
-        imageView.imageProperty().bind(Bindings.createObjectBinding(
-                () -> getImageFrom(selected), selected));
+    private void bind() {
+        AppState.get().getSelectedItem().addListener((observable, oldValue, newValue) -> {
+            selectedItemLabel.setText(newValue == null ? "null" : newValue.getFullPath().toString());
+            imageView.setImage(getImageFrom(newValue));
+        });
     }
 
-    private Image getImageFrom(SimpleObjectProperty<PathItem> selected) {
-        if (selected.isNull().get()) return null;
-        File file = selected.getValue().getFullPath().toFile();
+    private Image getImageFrom(PathItem selected) {
+        if (selected == null) return null;
+        File file = selected.getFullPath().toFile();
         return new Image(file.toURI().toString(), IMG_WIDTH, IMG_HEIGHT, true, false);
     }
 }
