@@ -61,6 +61,11 @@ public class FileBrowser extends TreeView<TreeEntity> {
         VBox.setVgrow(this, Priority.ALWAYS);
     }
 
+    //re-sets the node at the tree root
+    public void setData(FilePathTreeItem root) {
+        setRoot(root);
+    }
+
     private void addSelectionHandler() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Clicked on selected item: " + newValue.getValue().getPathItem().getFullPath());
