@@ -7,7 +7,6 @@ import com.paka.tagger.widgets.tagspanel.TagWidget;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 //TODO: change the way of rendering. The item should appear in the details panel iif it is in the metadata
