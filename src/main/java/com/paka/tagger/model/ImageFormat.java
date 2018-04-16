@@ -11,12 +11,13 @@ public enum ImageFormat { //TODO: add specific file info
     JPEG("JPEG"),
     TIFF("TIFF"),
     BMP("BMP"),
-    PNG("PNG");
+    PNG("PNG"),
+    NOT_SUPPORTED("Not supported");
 
     private String extension;
 
     public static ImageFormat getFormat(String extension) {
         return Arrays.stream(values()).filter((format) -> format.getExtension().equalsIgnoreCase(extension))
-                .findFirst().orElse(null);
+                .findFirst().orElse(NOT_SUPPORTED);
     }
 }

@@ -1,7 +1,7 @@
 package com.paka.tagger.state;
 
+import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.filters.Filter;
-import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
 public class AppState {
 
     //TODO all observables should go here
-    private SimpleObjectProperty<PathItem> selectedItem = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<TreeEntity> selectedItem = new SimpleObjectProperty<>();
     private SimpleObjectProperty<AppSettings> appSettings = new SimpleObjectProperty<>();
     private SimpleObjectProperty<List<Filter>> appliedFilters = new SimpleObjectProperty<>();
 
@@ -22,7 +22,7 @@ public class AppState {
         return INSTANCE;
     }
 
-    public void setSelectedItem(PathItem pathItem) {
+    public void setSelectedItem(TreeEntity pathItem) {
         this.selectedItem.setValue(pathItem);
     }
 

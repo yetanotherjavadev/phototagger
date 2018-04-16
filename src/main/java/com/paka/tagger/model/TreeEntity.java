@@ -1,30 +1,40 @@
 package com.paka.tagger.model;
 
+import com.paka.tagger.common.model.ImageMetadata;
 import com.paka.tagger.utils.FileUtils;
+import com.paka.tagger.utils.ImageUtils;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import com.paka.tagger.widgets.tagspanel.Tag;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 
-public class ImageEntity {
+@Getter
+public class TreeEntity {
 
     private PathItem pathItem;
     private ImageFormat format;
+    private ImageMetadata metadata;
     private List<Tag> tagsAssigned;
-    boolean processed;
+    private boolean valid;
 
-    public ImageEntity(Path path) {
+    public TreeEntity(Path path) {
         this.pathItem = new PathItem(path);
-        this.processed = false;
+        try {
+            this.metadata = ImageUtils.getImageMetadata(path);
+            this.valid = true;
+        } catch (IOException e) {
+            this.valid = false;
+            //TODO: print stack trace lol
+        }
         init();
     }
 
     private void init() {
         String fileExt = FileUtils.getFileExt(pathItem.getFullPath().toString());
-        ImageFormat format = ImageFormat.getFormat(fileExt);
-        if (format == null) throw new UnsupportedOperationException("Image format not supported: " + fileExt);
-        this.format = format;
+        this.format = ImageFormat.getFormat(fileExt);
     }
 
     public List<Tag> getTagsAssigned() {
@@ -32,6 +42,10 @@ public class ImageEntity {
             tagsAssigned = new ArrayList<>();
         }
         return tagsAssigned;
+    }
+
+    public ImageFormat getFormat() {
+        return format;
     }
 
     public void addTag(Tag tag) {
@@ -43,7 +57,7 @@ public class ImageEntity {
     }
 
     public void update() {
-        this.processed = true;
+        this.valid = true;
     }
 
     public void clearTags() {
@@ -52,5 +66,15 @@ public class ImageEntity {
 
     public boolean hasTagOn(Tag tag) {
         return getTagsAssigned().contains(tag);
+    }
+
+    public boolean hasTagsAssigned() {
+        return tagsAssigned == null || tagsAssigned.size() == 0;
+    }
+
+
+    @Override //TODO: fix it by changing TreeView Cell rendering
+    public String toString() {
+        return pathItem.getDisplayPath();
     }
 }

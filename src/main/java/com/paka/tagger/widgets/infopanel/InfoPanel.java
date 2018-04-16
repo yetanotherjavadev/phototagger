@@ -1,82 +1,80 @@
 package com.paka.tagger.widgets.infopanel;
 
-import com.paka.tagger.common.model.ImageMetadata;
+import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
-import com.paka.tagger.utils.ImageUtils;
-import com.paka.tagger.widgets.filebrowser.items.PathItem;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import javafx.geometry.Insets;
+import java.io.IOException;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 
+//TODO: change the way of rendering. The item should appear in the details panel iif it is in the metadata
 public class InfoPanel extends VBox {
 
-    private ImageMetadata imageMetadata;
+    private TreeEntity image;
 
-    //TODO: create FXML
+    @FXML
     private KeyValue dateLabel;
+    @FXML
     private KeyValue makeLabel;
+    @FXML
     private KeyValue modelLabel;
+    @FXML
     private KeyValue exposureLabel;
+    @FXML
     private KeyValue apertureLabel;
+    @FXML
     private KeyValue focalLengthLabel;
+    @FXML
     private KeyValue isoSpeedLabel;
+    @FXML
     private KeyValue flashLabel;
 
-    public InfoPanel() {
-        setPadding(new Insets(10, 10, 10, 10));
-        setWidth(200);
-        setMaxWidth(200);
-        init();
-        this.getChildren().addAll(dateLabel,
-                makeLabel,
-                modelLabel,
-                exposureLabel,
-                apertureLabel,
-                focalLengthLabel,
-                isoSpeedLabel,
-                flashLabel);
+    @FXML
+    private VBox generalInfoContainer;
+    @FXML
+    private VBox tagsContainer;
 
+    public InfoPanel() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/InfoPanel.fxml"));
+        fxmlLoader.setController(this);
+        fxmlLoader.setRoot(this);
+        fxmlLoader.load();
+    }
+
+    @FXML
+    public void initialize() {
         bind();
     }
 
-
     private void bind() {
-        AppState.get().getSelectedItem().addListener((observable, oldValue, newValue) -> showDataForBind(newValue));
+        AppState.get().getSelectedItem().addListener((observable, oldValue, newValue) -> showData(newValue));
     }
 
-    private void init() {
-        dateLabel = new KeyValue("Date: ", "01/01/1970");
-        makeLabel = new KeyValue("Make: " , "A");
-        modelLabel = new KeyValue("Model: ", "A");
-        exposureLabel = new KeyValue("Exposure: ", "A");
-        apertureLabel = new KeyValue("Aperture: ", "A");
-        focalLengthLabel = new KeyValue("Focal Length: ", "A");
-        isoSpeedLabel = new KeyValue("ISO Speed: ", "A");
-        flashLabel = new KeyValue("Flash: ", "A");
-    }
-
-    private void setData(ImageMetadata metadata) {
-        this.imageMetadata = metadata;
+    private void setData(TreeEntity entity) {
+        this.image = entity;
         render();
     }
 
     private void render() {
-        dateLabel.setValue(imageMetadata.getDate());
-        makeLabel.setValue(imageMetadata.getMake());
-        modelLabel.setValue(imageMetadata.getModel());
-        exposureLabel.setValue(imageMetadata.getExposure());
-        apertureLabel.setValue(imageMetadata.getAperture());
-        focalLengthLabel.setValue(imageMetadata.getFocalLength());
-        isoSpeedLabel.setValue(imageMetadata.getIsoSpeed());
-        flashLabel.setValue(String.valueOf(imageMetadata.isFlash()));
+        dateLabel.setValue(image.getMetadata().getDate());
+        makeLabel.setValue(image.getMetadata().getMake());
+        modelLabel.setValue(image.getMetadata().getModel());
+        exposureLabel.setValue(image.getMetadata().getExposure());
+        apertureLabel.setValue(image.getMetadata().getAperture());
+        focalLengthLabel.setValue(image.getMetadata().getFocalLength());
+        isoSpeedLabel.setValue(image.getMetadata().getIsoSpeed());
+        flashLabel.setValue(String.valueOf(image.getMetadata().isFlash()));
+
+        if (image.hasTagsAssigned()) {
+            //render tags
+
+        }
     }
 
-    private void showDataForBind(PathItem path) {
-        if (path == null) return;
+    private void showData(TreeEntity entity) {
+        if (entity == null) return;
         try {
-            Path aPath = Paths.get(path.getFullPath().toString());
-            setData(ImageUtils.getImageMetadata(aPath));
+            setData(entity);
         } catch (Exception e) {
             System.out.println("Something went wrong: " + e);
         }

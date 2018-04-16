@@ -19,9 +19,4 @@ public class PathItem { //TODO check the contents of this class
 			this.displayPath = fileName;
 		}
 	}
-
-	@Override //TODO fix
-	public String toString() {
-		return displayPath;
-	}
 }

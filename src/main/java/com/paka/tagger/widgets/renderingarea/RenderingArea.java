@@ -1,7 +1,7 @@
 package com.paka.tagger.widgets.renderingarea;
 
+import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
-import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import java.io.File;
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -36,14 +36,14 @@ public class RenderingArea extends FlowPane {
 
     private void bind() {
         AppState.get().getSelectedItem().addListener((observable, oldValue, newValue) -> {
-            selectedItemLabel.setText(newValue == null ? "null" : newValue.getFullPath().toString());
+            selectedItemLabel.setText(newValue == null ? "null" : newValue.getPathItem().getFullPath().toString());
             imageView.setImage(getImageFrom(newValue));
         });
     }
 
-    private Image getImageFrom(PathItem selected) {
+    private Image getImageFrom(TreeEntity selected) {
         if (selected == null) return null;
-        File file = selected.getFullPath().toFile();
+        File file = selected.getPathItem().getFullPath().toFile();
         return new Image(file.toURI().toString(), IMG_WIDTH, IMG_HEIGHT, true, false);
     }
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ImageMetadata {
+public class ImageMetadata { //TODO: figure out which metadata is usually stored in different image formats
 
     private String make;
     private String model;
