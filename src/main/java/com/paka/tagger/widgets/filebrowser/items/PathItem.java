@@ -1,21 +1,23 @@
 package com.paka.tagger.widgets.filebrowser.items;
 
-import lombok.AllArgsConstructor;
+import com.paka.tagger.utils.FileUtils;
+import java.nio.file.Path;
 import lombok.Getter;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Getter
-@AllArgsConstructor
-public class PathItem {
+public class PathItem { //TODO check the contents of this class
 
 	private String displayPath;
 	private Path fullPath;
 
-	public PathItem(String displayPath, String fullPath) {
-		this.displayPath = displayPath;
-		this.fullPath = Paths.get(fullPath);
+	public PathItem(Path path) {
+		this.fullPath = path;
+		String fileName = FileUtils.getFileName(path);
+		if (fileName == null || fileName.isEmpty()) {
+			this.displayPath = path.toString();
+		} else {
+			this.displayPath = fileName;
+		}
 	}
 
 	@Override //TODO fix

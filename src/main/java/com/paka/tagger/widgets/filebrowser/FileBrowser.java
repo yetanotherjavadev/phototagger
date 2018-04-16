@@ -38,12 +38,12 @@ public class FileBrowser extends TreeView<PathItem> {
             System.out.println("Something went wrong, leaving default host name");
         }
 
-        PathItem rootItem = new PathItem(hostName, hostName);
+        PathItem rootItem = new PathItem(Paths.get(hostName));
         FilePathTreeItem rootNode = new FilePathTreeItem(rootItem, new ImageView(IconProvider.getImage(COMPUTER_ICON_PATH)));
 
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
         for (Path name : rootDirectories) {
-            FilePathTreeItem treeNode = new FilePathTreeItem(new PathItem(name.toString(), name));
+            FilePathTreeItem treeNode = new FilePathTreeItem(new PathItem(name));
             rootNode.getChildren().add(treeNode);
         }
         rootNode.setExpanded(true);
@@ -67,7 +67,8 @@ public class FileBrowser extends TreeView<PathItem> {
                         DirectoryStream<Path> dir = Files.newDirectoryStream(source.getValue().getFullPath());
                         for (Path file : dir) {
                             if (file.toFile().isDirectory() || isExtSupported(file)) {
-                                FilePathTreeItem treeNode = new FilePathTreeItem(new PathItem(FileUtils.getFileName(file), file));
+//                                FilePathTreeItem treeNode = new FilePathTreeItem(new PathItem(FileUtils.getFileName(file), file));
+                                FilePathTreeItem treeNode = new FilePathTreeItem(new PathItem(file));
                                 source.getChildren().add(treeNode);
                             }
                         }
