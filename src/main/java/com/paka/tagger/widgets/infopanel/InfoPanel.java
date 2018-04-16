@@ -1,10 +1,13 @@
 package com.paka.tagger.widgets.infopanel;
 
+import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
+import com.paka.tagger.widgets.tagspanel.TagWidget;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 //TODO: change the way of rendering. The item should appear in the details panel iif it is in the metadata
@@ -66,8 +69,10 @@ public class InfoPanel extends VBox {
         flashLabel.setValue(String.valueOf(image.getMetadata().isFlash()));
 
         if (image.hasTagsAssigned()) {
-            //render tags
-
+            tagsContainer.getChildren().clear();
+            for (Tag tag : image.getTagsAssigned()) {
+                tagsContainer.getChildren().add(new TagWidget(tagsContainer, tag.getText(), true));
+            }
         }
     }
 

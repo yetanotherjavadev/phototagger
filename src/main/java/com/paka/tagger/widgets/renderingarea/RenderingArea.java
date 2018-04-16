@@ -16,7 +16,7 @@ public class RenderingArea extends FlowPane {
     private static final double IMG_WIDTH = 760;
     private static final double IMG_HEIGHT = 560;
 
-    @FXML // image that is currently displayed
+    @FXML // container for image that is currently displayed
     private ImageView imageView;
 
     @FXML // current path

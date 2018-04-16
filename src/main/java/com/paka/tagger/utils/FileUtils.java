@@ -16,6 +16,10 @@ public class FileUtils {
         return ext.toLowerCase();
     }
 
+    public static String getFileExt(Path path) {
+        return getFileExt(path.toString());
+    }
+
     public static String getFileName(Path file) {
         String fullName = file.toString();
         int i = fullName.lastIndexOf("\\");

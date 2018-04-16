@@ -1,10 +1,10 @@
 package com.paka.tagger.model;
 
 import com.paka.tagger.common.model.ImageMetadata;
+import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.utils.ImageUtils;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
-import com.paka.tagger.widgets.tagspanel.Tag;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ public class TreeEntity {
         this.pathItem = new PathItem(path);
         try {
             this.metadata = ImageUtils.getImageMetadata(path);
-            this.valid = true;
+            this.valid = true; // the item is "valid" if it has metadata and it is "supported"
         } catch (IOException e) {
             this.valid = false;
-            //TODO: print stack trace lol
+            //TODO: print stack trace
         }
         init();
     }
@@ -69,7 +69,7 @@ public class TreeEntity {
     }
 
     public boolean hasTagsAssigned() {
-        return tagsAssigned == null || tagsAssigned.size() == 0;
+        return tagsAssigned != null && tagsAssigned.size() > 0;
     }
 
 

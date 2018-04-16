@@ -1,6 +1,6 @@
 package com.paka.tagger.state.filters;
 
-import com.paka.tagger.widgets.tagspanel.Tag;
+import com.paka.tagger.common.model.Tag;
 import java.util.ArrayList;
 import java.util.List;
 

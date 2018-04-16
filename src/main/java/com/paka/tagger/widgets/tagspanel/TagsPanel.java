@@ -7,11 +7,11 @@ import javafx.scene.layout.FlowPane;
 
 public class TagsPanel extends FlowPane {
 
-    private List<Tag> tags = new ArrayList<>();
+    private List<TagWidget> tags = new ArrayList<>();
 
     public TagsPanel() {   }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(List<TagWidget> tags) {
         if (tags == null) tags = getDefaultTags();
         this.tags = tags;
         setPrefHeight(100);
@@ -19,11 +19,11 @@ public class TagsPanel extends FlowPane {
         render();
     }
 
-    private List<Tag> getDefaultTags() {
-        List<Tag> tags = new ArrayList<>(Arrays.asList(new Tag(this, "Italy"),
-                new Tag(this, "Spain"),
-                new Tag(this, "Romania"),
-                new Tag(this, "Ukraine")));
+    private List<TagWidget> getDefaultTags() {
+        List<TagWidget> tags = new ArrayList<>(Arrays.asList(new TagWidget(this, "Italy"),
+                new TagWidget(this, "Spain"),
+                new TagWidget(this, "Romania"),
+                new TagWidget(this, "Ukraine")));
         return tags;
     }
 

@@ -4,10 +4,12 @@ import static com.paka.tagger.common.constants.IconPaths.COMPUTER_ICON_PATH;
 import static com.paka.tagger.common.constants.IconPaths.FOLDER_EXPAND_ICON_PATH;
 
 import com.paka.tagger.common.graphics.IconProvider;
+import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.config.MainAppConfig;
 import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.filters.Filter;
+import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -17,16 +19,15 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 //TODO: add file alternation listener (in case of external file system changes the tree should rebuild itself)
 public class FileBrowser extends TreeView<TreeEntity> {
@@ -74,9 +75,13 @@ public class FileBrowser extends TreeView<TreeEntity> {
                 if (isDirectory) {
                     if (source.getChildren().isEmpty()) { //happens on first dir opening
                         DirectoryStream<Path> dir = Files.newDirectoryStream(source.getValue().getPathItem().getFullPath());
-                        for (Path file : dir) {
-                            if (file.toFile().isDirectory() || isExtSupported(file)) {
-                                FilePathTreeItem treeNode = new FilePathTreeItem(new TreeEntity(file));
+                        for (Path path : dir) {
+                            if (pathSupported(path)) {
+                                TreeEntity treeEntity = new TreeEntity(path);
+                                if (!path.toFile().isDirectory()) {
+                                    treeEntity.addTag(new Tag(FileUtils.getFileExt(path)));
+                                }
+                                FilePathTreeItem treeNode = new FilePathTreeItem(treeEntity);
                                 source.getChildren().add(treeNode);
                             }
                         }
@@ -90,6 +95,8 @@ public class FileBrowser extends TreeView<TreeEntity> {
         });
     }
 
+
+
     private void addFilteringHandler() {
         AppState.get().getAppliedFilters().addListener(new ChangeListener<List<Filter>>() {
             @Override
@@ -100,7 +107,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
         });
     }
 
-    private boolean isExtSupported(Path path) {
-        return MainAppConfig.isPathSupported(path);
+    private boolean pathSupported(Path path) {
+        return path.toFile().isDirectory() || MainAppConfig.isPathSupported(path);
     }
 }
