@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 public class MainLayoutController extends StackPane {
 
@@ -54,7 +55,13 @@ public class MainLayoutController extends StackPane {
 
     private void initMenu() {
         //should scan directories for images
-        mainMenu.setScanCallback(param -> null);
+        mainMenu.setScanCallback(new Callback<String, String>() {
+            @Override
+            public String call(String param) {
+                fileBrowser.rescanCurrent();
+                return "OK";
+            }
+        });
     }
 
     private void initTagsPanel() {

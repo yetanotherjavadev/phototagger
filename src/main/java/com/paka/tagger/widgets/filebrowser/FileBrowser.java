@@ -36,11 +36,12 @@ public class FileBrowser extends TreeView<TreeEntity> {
 
     private static final String STARTING_DIR = "D:/";
     private FilePathTreeItem initialTreeRoot;
-    private final boolean lazyScan = false; //TODO implement lazy scanning
+    private boolean lazyScan; //TODO implement fully functional lazy scanning
     private int scanningDepth;
 
     public FileBrowser() {
         this.scanningDepth = 5;
+        this.lazyScan = true;
         initTree();
         addSelectionHandler();
         addFilteringHandler();
@@ -101,6 +102,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
                 ImageView iv = (ImageView) newValue.getGraphic();
                 iv.setImage(IconProvider.getImage(FOLDER_EXPAND_ICON_PATH));
             }
+            AppState.get().setSelectedNode(newValue);
             try {
                 if (isDirectory) {
                     if (newValue.getChildren().isEmpty()) { //happens on first dir opening
@@ -121,8 +123,6 @@ public class FileBrowser extends TreeView<TreeEntity> {
                             }
                         }
                     }
-                } else { //TODO: implement rescanning a directory for changes this would be the place to do it
-                    AppState.get().setSelectedItem(newValue.getValue());
                 }
             } catch (IOException e) {
                 System.out.println("Error accessing file: " + e);
@@ -152,6 +152,10 @@ public class FileBrowser extends TreeView<TreeEntity> {
         starting.setExpanded(true);
         long took = System.currentTimeMillis() - start;
         System.out.println("Scanning took: " + took + "ms");
+    }
+
+    public void rescanCurrent() {
+        rescan(AppState.get().getSelectedNode().get());
     }
 
     private List<FilePathTreeItem> getChildren(FilePathTreeItem item) {
@@ -195,8 +199,4 @@ public class FileBrowser extends TreeView<TreeEntity> {
     private boolean pathSupported(Path path) {
         return path.toFile().isDirectory() || MainAppConfig.isPathSupported(path);
     }
-
-//    private boolean pathSupported2(Path path) {
-//        return true;
-//    }
 }

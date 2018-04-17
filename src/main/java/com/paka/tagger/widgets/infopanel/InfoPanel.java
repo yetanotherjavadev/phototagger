@@ -49,7 +49,7 @@ public class InfoPanel extends VBox {
     }
 
     private void bind() {
-        AppState.get().getSelectedItem().addListener((observable, oldValue, newValue) -> showData(newValue));
+        AppState.get().getSelectedNode().addListener((observable, oldValue, newValue) -> showData(newValue.getValue()));
     }
 
     private void setData(TreeEntity entity) {
