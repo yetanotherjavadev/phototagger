@@ -10,8 +10,10 @@ import com.paka.tagger.config.MainAppConfig;
 import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.filters.Filter;
+import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
+import com.paka.tagger.widgets.filebrowser.items.TreeItemPredicate;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -23,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
@@ -41,7 +44,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
 
     public FileBrowser() {
         this.scanningDepth = 5;
-        this.lazyScan = true;
+        this.lazyScan = false;
         initTree();
         addSelectionHandler();
         addFilteringHandler();
@@ -139,9 +142,30 @@ public class FileBrowser extends TreeView<TreeEntity> {
         });
     }
 
-    //TODO: re-scan all folder tree from the root and leave only those folder which match the filtering rules
     private void filter(List<Filter> filters) {
+        initialTreeRoot.setPredicate(new TreeItemPredicate<TreeEntity>() {
+            @Override
+            public boolean test(TreeItem<TreeEntity> parent, TreeEntity value) {
+                return tagMatch(filters, value); //TODO consider parent value here
+            }
+        });
+    }
 
+    //TODO convert to java8 map matcher
+    private boolean tagMatch(List<Filter> filters, TreeEntity entity) {
+        if (filters == null || filters.isEmpty()) return true;
+        List<Tag> tags = entity.getTagsAssigned();
+
+        for (Filter filter : filters) {
+            if (filter instanceof TagFilter) {
+                List<Tag> filterTags = ((TagFilter) filter).getSelectedTags();
+                for (Tag filterTag : filterTags) {
+                    if (tags.contains(filterTag)) return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     //TODO implement multithreaded scanning

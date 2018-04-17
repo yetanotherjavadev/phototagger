@@ -35,11 +35,6 @@ public class RenderingArea extends FlowPane {
     }
 
     private void bind() {
-//        AppState.get().getSelectedItem().addListener((observable, oldValue, newValue) -> {
-//            selectedItemLabel.setText(newValue == null ? "null" : newValue.getPathItem().getFullPath().toString());
-//            imageView.setImage(getImageFrom(newValue));
-//        });
-
         AppState.get().getSelectedNode().addListener((observable, oldValue, newValue) -> {
             selectedItemLabel.setText(newValue == null ? "null" : newValue.getValue().getPathItem().getFullPath().toString());
             imageView.setImage(getImageFrom(newValue));

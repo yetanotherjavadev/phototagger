@@ -9,6 +9,7 @@ import javafx.util.Callback;
 public class MainMenuBarController extends MenuBar {
 
     private Callback<String, String> scanCallback;
+    private Callback<String, String> tagCallback;
 
     public MainMenuBarController() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/MainMenuBar.fxml"));
@@ -30,7 +31,19 @@ public class MainMenuBarController extends MenuBar {
         }
     }
 
+    @FXML
+    public void testJPGTag() {
+        if (tagCallback != null) {
+            String tag = tagCallback.call(null);
+            System.out.println(tag);
+        }
+    }
+
     public void setScanCallback(Callback<String, String> callback) {
         this.scanCallback = callback;
+    }
+
+    public void setTagCallback(Callback<String, String> callback) {
+        this.tagCallback = callback;
     }
 }

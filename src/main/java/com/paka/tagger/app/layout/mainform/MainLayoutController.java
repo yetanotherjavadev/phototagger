@@ -1,11 +1,17 @@
 package com.paka.tagger.app.layout.mainform;
 
 import com.paka.tagger.app.layout.menu.MainMenuBarController;
+import com.paka.tagger.common.model.Tag;
+import com.paka.tagger.state.AppState;
+import com.paka.tagger.state.filters.Filter;
+import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.widgets.filebrowser.FileBrowser;
 import com.paka.tagger.widgets.infopanel.InfoPanel;
 import com.paka.tagger.widgets.renderingarea.RenderingArea;
 import com.paka.tagger.widgets.tagspanel.TagsPanel;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -60,6 +66,22 @@ public class MainLayoutController extends StackPane {
             public String call(String param) {
                 fileBrowser.rescanCurrent();
                 return "OK";
+            }
+        });
+
+        mainMenu.setTagCallback(new Callback<String, String>() {
+            @Override
+            public String call(String param) {
+                List<Filter> filters = new ArrayList<>();
+                List<Tag> tags = new ArrayList<>();
+                tags.add(new Tag("jpg"));
+                TagFilter tf = new TagFilter(tags);
+
+                filters.add(tf);
+
+                AppState.get().setAppliedFilters(filters);
+
+                return "Tag filter set";
             }
         });
     }

@@ -8,6 +8,7 @@
     <Menu text="File">
         <MenuItem text="Scan Folder" onAction="#performScan"/>
         <MenuItem text="Save Image"/>
+        <MenuItem text="Test JPG Tag" onAction="#testJPGTag"/>
         <SeparatorMenuItem/>
         <MenuItem text="Exit" onAction="#exitAction"/>
     </Menu>

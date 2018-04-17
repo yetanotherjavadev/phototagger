@@ -13,7 +13,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FilePathTreeItem extends FilterableTreeItem<TreeEntity> {
+public class FilePathTreeItem extends FilterableTreeItem2<TreeEntity> {
 
     private boolean scanned;
 
@@ -34,6 +34,4 @@ public class FilePathTreeItem extends FilterableTreeItem<TreeEntity> {
             this.setGraphic(new ImageView(img));
         }
     }
-
-
 }
