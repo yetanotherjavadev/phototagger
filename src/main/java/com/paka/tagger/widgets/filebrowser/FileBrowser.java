@@ -1,6 +1,7 @@
 package com.paka.tagger.widgets.filebrowser;
 
 import static com.paka.tagger.common.constants.IconPaths.COMPUTER_ICON_PATH;
+import static com.paka.tagger.common.constants.IconPaths.FOLDER_COLLAPSE_ICON_PATH;
 import static com.paka.tagger.common.constants.IconPaths.FOLDER_EXPAND_ICON_PATH;
 
 import com.paka.tagger.common.graphics.IconProvider;
@@ -19,6 +20,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,54 +34,77 @@ import javafx.scene.layout.VBox;
 //TODO: add file alternation listener (in case of external file system changes the tree should rebuild itself)
 public class FileBrowser extends TreeView<TreeEntity> {
 
+    private static final String STARTING_DIR = "D:/";
+    private FilePathTreeItem initialTreeRoot;
+    private final boolean lazyScan = false; //TODO implement lazy scanning
+    private int scanningDepth;
+
     public FileBrowser() {
+        this.scanningDepth = 5;
         initTree();
         addSelectionHandler();
         addFilteringHandler();
     }
 
     //TODO: implement "scan" feature to hide directories that don't contain images
-    //TODO: do not start from the host node
+
     private void initTree() {
+//        createDefaultRoot();
+        createRoot();
+
+        VBox.setVgrow(this, Priority.ALWAYS);
+    }
+
+    private void createRoot() {
+        Path path = Paths.get(STARTING_DIR);
+        TreeEntity root = new TreeEntity(path);
+        FilePathTreeItem rootNode = new FilePathTreeItem(root, new ImageView(IconProvider.getImage(FOLDER_COLLAPSE_ICON_PATH)));
+        setData(rootNode);
+
+        if (!lazyScan) {
+            rescan(rootNode);
+        }
+    }
+
+    //starts scanning from the very top level (e.g. "My Computer" in Win)
+    private void createDefaultRoot() {
         String hostName = "Localhost"; // local computer "name"
         try {
             hostName = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException x) {
             System.out.println("Something went wrong, leaving default host name");
         }
-
         TreeEntity rootItem = new TreeEntity(Paths.get(hostName));
         FilePathTreeItem rootNode = new FilePathTreeItem(rootItem, new ImageView(IconProvider.getImage(COMPUTER_ICON_PATH)));
 
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
-        for (Path name : rootDirectories) {
-            FilePathTreeItem treeNode = new FilePathTreeItem(new TreeEntity(name));
-            rootNode.getChildren().add(treeNode);
+        for (Path dir : rootDirectories) {
+            FilePathTreeItem treeNode = new FilePathTreeItem(new TreeEntity(dir));
+            rootNode.getChildren().addAll(getChildren(treeNode, scanningDepth));
         }
         rootNode.setExpanded(true);
-        setRoot(rootNode);
-
-        VBox.setVgrow(this, Priority.ALWAYS);
+        setData(rootNode);
     }
 
     //re-sets the node at the tree root
     public void setData(FilePathTreeItem root) {
         setRoot(root);
+        this.initialTreeRoot = root;
     }
 
     private void addSelectionHandler() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Clicked on selected item: " + newValue.getValue().getPathItem().getFullPath());
-            TreeItem<TreeEntity> source = observable.getValue();
-            boolean isDirectory = source.getValue().getPathItem().getFullPath().toFile().isDirectory();
-            if (isDirectory && source.isExpanded()) {
-                ImageView iv = (ImageView) source.getGraphic();
+            Path fullPath = newValue.getValue().getPathItem().getFullPath();
+            System.out.println("Clicked on selected item: " + fullPath);
+            boolean isDirectory = fullPath.toFile().isDirectory();
+            if (isDirectory && newValue.isExpanded()) {
+                ImageView iv = (ImageView) newValue.getGraphic();
                 iv.setImage(IconProvider.getImage(FOLDER_EXPAND_ICON_PATH));
             }
             try {
                 if (isDirectory) {
-                    if (source.getChildren().isEmpty()) { //happens on first dir opening
-                        DirectoryStream<Path> dir = Files.newDirectoryStream(source.getValue().getPathItem().getFullPath());
+                    if (newValue.getChildren().isEmpty()) { //happens on first dir opening
+                        DirectoryStream<Path> dir = Files.newDirectoryStream(fullPath);
                         for (Path path : dir) {
                             if (pathSupported(path)) {
                                 TreeEntity treeEntity = new TreeEntity(path);
@@ -86,32 +112,91 @@ public class FileBrowser extends TreeView<TreeEntity> {
                                     treeEntity.addTag(new Tag(FileUtils.getFileExt(path)));
                                 }
                                 FilePathTreeItem treeNode = new FilePathTreeItem(treeEntity);
-                                source.getChildren().add(treeNode);
+                                if (lazyScan) {
+                                    newValue.getChildren().add(treeNode);
+                                } else {
+                                    newValue.getChildren().addAll(getChildren(treeNode));
+                                }
+
                             }
                         }
                     }
                 } else { //TODO: implement rescanning a directory for changes this would be the place to do it
-                    AppState.get().setSelectedItem(source.getValue());
+                    AppState.get().setSelectedItem(newValue.getValue());
                 }
-            } catch (IOException x) {
-                x.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("Error accessing file: " + e);
             }
         });
     }
-
-
 
     private void addFilteringHandler() {
         AppState.get().getAppliedFilters().addListener(new ChangeListener<List<Filter>>() {
             @Override
             public void changed(ObservableValue<? extends List<Filter>> observable, List<Filter> oldValue, List<Filter> newValue) {
-                //TODO: re-scan all folder tree from the root and leave only those folder which match the filtering rules
-
+                filter(newValue);
             }
         });
+    }
+
+    //TODO: re-scan all folder tree from the root and leave only those folder which match the filtering rules
+    private void filter(List<Filter> filters) {
+
+    }
+
+    //TODO implement multithreaded scanning
+    private void rescan(FilePathTreeItem starting) {
+        long start = System.currentTimeMillis();
+        starting.getChildren().clear();
+        starting.getChildren().addAll(getChildren(starting, scanningDepth));
+        starting.setExpanded(true);
+        long took = System.currentTimeMillis() - start;
+        System.out.println("Scanning took: " + took + "ms");
+    }
+
+    private List<FilePathTreeItem> getChildren(FilePathTreeItem item) {
+        return getChildren(item, Integer.MAX_VALUE);
+    }
+
+    private List<FilePathTreeItem> getChildren(FilePathTreeItem item, int depth) {
+        List<FilePathTreeItem> result = new ArrayList<>();
+        if (depth == 0) return result;
+        item.setScanned(true);
+
+        Path fullPath = item.getValue().getPathItem().getFullPath();
+        boolean isDirectory = fullPath.toFile().isDirectory();
+
+        if (isDirectory) {
+            DirectoryStream<Path> stream = null;
+            try {
+                System.out.println("Scanning dir: " + fullPath);
+                stream = Files.newDirectoryStream(fullPath);
+            } catch (Exception e) {
+                System.out.println("Can't dig into directory: " + fullPath);
+            }
+            if (stream != null) {
+                for (Path path : stream) {
+                    if (pathSupported(path)) {
+                        TreeEntity treeEntity = new TreeEntity(path);
+                        if (!path.toFile().isDirectory()) {
+                            treeEntity.addTag(new Tag(FileUtils.getFileExt(path)));
+                        }
+                        FilePathTreeItem treeNode = new FilePathTreeItem(treeEntity);
+                        treeNode.getChildren().addAll(getChildren(treeNode, depth - 1));
+                        result.add(treeNode);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     private boolean pathSupported(Path path) {
         return path.toFile().isDirectory() || MainAppConfig.isPathSupported(path);
     }
+
+//    private boolean pathSupported2(Path path) {
+//        return true;
+//    }
 }
