@@ -10,6 +10,7 @@ import com.paka.tagger.config.MainAppConfig;
 import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.filters.TagFilter;
+import com.paka.tagger.state.matchers.MatchingUtils;
 import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import com.paka.tagger.widgets.filebrowser.utils.TreeUtils;
@@ -21,8 +22,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Set;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeView;
@@ -136,29 +135,12 @@ public class FileBrowser extends TreeView<TreeEntity> {
         AppState.get().getAppliedFiltersProperty().addListener(new ChangeListener<TagFilter>() {
             @Override
             public void changed(ObservableValue<? extends TagFilter> observable, TagFilter oldValue, TagFilter newValue) {
-                filter(newValue);
+                initialTreeRoot.setPredicate((parent, value) -> {
+                    return MatchingUtils.isMatchingAnyTag(newValue, value); //should I consider using parent value here too?
+                });
+                getSelectionModel().select(0);
             }
         });
-    }
-
-    private void filter(TagFilter filter) { //TODO: shouldn't be set to here each time
-        initialTreeRoot.setPredicate((parent, value) -> {
-            return tagMatch(filter, value); //TODO consider parent value here too
-        });
-        getSelectionModel().select(0);
-    }
-
-    //TODO convert to java8 map matcher
-    private boolean tagMatch(TagFilter filter, TreeEntity entity) {
-        if (filter == null || filter.getSelectedTags().isEmpty()) return true;
-        Set<Tag> tags = entity.getTagsAssigned();
-
-        Set<Tag> filterTags = filter.getSelectedTags();
-        for (Tag filterTag : filterTags) {
-            if (tags.contains(filterTag)) return true;
-        }
-
-        return false;
     }
 
     //TODO implement multithreaded scanning

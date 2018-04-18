@@ -19,6 +19,6 @@
     <Menu text="Help">
         <MenuItem text="Online Manual" visible="false"/>
         <SeparatorMenuItem/>
-        <MenuItem text="About"/>
+        <MenuItem text="About" disable="true"/>
     </Menu>
 </fx:root>
