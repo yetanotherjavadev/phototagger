@@ -3,7 +3,6 @@ package com.paka.tagger.app.layout.mainform;
 import com.paka.tagger.app.layout.menu.MainMenuBarController;
 import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.state.AppState;
-import com.paka.tagger.state.filters.Filter;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.widgets.filebrowser.FileBrowser;
 import com.paka.tagger.widgets.infopanel.InfoPanel;
@@ -12,6 +11,8 @@ import com.paka.tagger.widgets.tagspanel.TagsPanel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -25,12 +26,18 @@ import javafx.util.Callback;
 
 public class MainLayoutController extends StackPane {
 
-    @FXML private MainMenuBarController mainMenu;
-    @FXML private BorderPane mainPane;
-    @FXML private FileBrowser fileBrowser;
-    @FXML private RenderingArea renderingArea;
-    @FXML private InfoPanel infoPanel;
-    @FXML private TagsPanel tagsPanel;
+    @FXML
+    private MainMenuBarController mainMenu;
+    @FXML
+    private BorderPane mainPane;
+    @FXML
+    private FileBrowser fileBrowser;
+    @FXML
+    private RenderingArea renderingArea;
+    @FXML
+    private InfoPanel infoPanel;
+    @FXML
+    private TagsPanel tagsPanel;
 
     public MainLayoutController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/MainLayout.fxml"));
@@ -68,34 +75,16 @@ public class MainLayoutController extends StackPane {
                 return "OK";
             }
         });
-
-        mainMenu.setTagCallback(new Callback<String, String>() {
-            @Override
-            public String call(String param) {
-                List<Filter> filters = new ArrayList<>();
-                List<Tag> tags = new ArrayList<>();
-                tags.add(new Tag("jpg"));
-                TagFilter tf = new TagFilter(tags);
-
-                filters.add(tf);
-
-                AppState.get().setAppliedFilters(filters);
-
-                return "Tag filter set";
-            }
-        });
-
-        mainMenu.setRemoveTagCallback(new Callback<String, String>() {
-            @Override
-            public String call(String param) {
-                AppState.get().setAppliedFilters(new ArrayList<>());
-                return "Tag filter removed";
-            }
-        });
     }
 
     private void initTagsPanel() {
-        tagsPanel.setTags(null);
+        AppState.get().getAppliedFiltersProperty().addListener(new ChangeListener<TagFilter>() {
+            @Override
+            public void changed(ObservableValue<? extends TagFilter> observable, TagFilter oldValue, TagFilter newValue) {
+                List<Tag> newAppliedTags = new ArrayList<>(newValue.getSelectedTags());
+                tagsPanel.setTags(newAppliedTags);
+            }
+        });
     }
 
     private void initInfoPanel() {

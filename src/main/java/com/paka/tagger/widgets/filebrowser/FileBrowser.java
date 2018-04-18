@@ -9,7 +9,6 @@ import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.config.MainAppConfig;
 import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
-import com.paka.tagger.state.filters.Filter;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
@@ -133,32 +132,28 @@ public class FileBrowser extends TreeView<TreeEntity> {
     }
 
     private void addFilteringHandler() {
-        AppState.get().getAppliedFilters().addListener(new ChangeListener<List<Filter>>() {
+        AppState.get().getAppliedFiltersProperty().addListener(new ChangeListener<TagFilter>() {
             @Override
-            public void changed(ObservableValue<? extends List<Filter>> observable, List<Filter> oldValue, List<Filter> newValue) {
+            public void changed(ObservableValue<? extends TagFilter> observable, TagFilter oldValue, TagFilter newValue) {
                 filter(newValue);
             }
         });
     }
 
-    private void filter(List<Filter> filters) {
+    private void filter(TagFilter filter) {
         initialTreeRoot.setPredicate((parent, value) -> {
-            return tagMatch(filters, value); //TODO consider parent value here too
+            return tagMatch(filter, value); //TODO consider parent value here too
         });
     }
 
     //TODO convert to java8 map matcher
-    private boolean tagMatch(List<Filter> filters, TreeEntity entity) {
-        if (filters == null || filters.isEmpty()) return true;
+    private boolean tagMatch(TagFilter filter, TreeEntity entity) {
+        if (filter == null || filter.getSelectedTags().isEmpty()) return true;
         List<Tag> tags = entity.getTagsAssigned();
 
-        for (Filter filter : filters) {
-            if (filter instanceof TagFilter) {
-                List<Tag> filterTags = ((TagFilter) filter).getSelectedTags();
-                for (Tag filterTag : filterTags) {
-                    if (tags != null && tags.contains(filterTag)) return true;
-                }
-            }
+        List<Tag> filterTags = filter.getSelectedTags();
+        for (Tag filterTag : filterTags) {
+            if (tags != null && tags.contains(filterTag)) return true;
         }
 
         return false;
@@ -175,7 +170,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
     }
 
     public void rescanCurrent() {
-        rescan(AppState.get().getSelectedNode().get());
+        rescan(AppState.get().getSelectedNodeProperty().get());
     }
 
     private boolean pathSupported(Path path) {

@@ -49,7 +49,7 @@ public class InfoPanel extends VBox {
     }
 
     private void bind() {
-        AppState.get().getSelectedNode().addListener((observable, oldValue, newValue) -> showData(newValue.getValue()));
+        AppState.get().getSelectedNodeProperty().addListener((observable, oldValue, newValue) -> showData(newValue.getValue()));
     }
 
     private void setData(TreeEntity entity) {
@@ -70,7 +70,7 @@ public class InfoPanel extends VBox {
         if (image.hasTagsAssigned()) {
             tagsContainer.getChildren().clear();
             for (Tag tag : image.getTagsAssigned()) {
-                tagsContainer.getChildren().add(new TagWidget(tagsContainer, tag.getText(), true));
+                tagsContainer.getChildren().add(new TagWidget(tagsContainer, tag, true));
             }
         }
     }

@@ -1,6 +1,11 @@
 package com.paka.tagger.app.layout.menu;
 
+import com.paka.tagger.common.model.Tag;
+import com.paka.tagger.state.AppState;
+import com.paka.tagger.state.filters.TagFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
@@ -34,18 +39,16 @@ public class MainMenuBarController extends MenuBar {
 
     @FXML
     public void testJPGTag() {
-        if (tagCallback != null) {
-            String tag = tagCallback.call(null);
-            System.out.println(tag);
-        }
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag("jpg"));
+        TagFilter tf = new TagFilter(tags);
+
+        AppState.get().setAppliedFilters(tf);
     }
 
     @FXML
     public void removeAllTags() {
-        if (tagRemoveCallback != null) {
-            String result = tagRemoveCallback.call("aaa");
-            System.out.println(result);
-        }
+        AppState.get().setAppliedFilters(new TagFilter());
     }
 
     public void setScanCallback(Callback<String, String> callback) {

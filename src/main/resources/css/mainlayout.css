@@ -8,6 +8,10 @@
 .tagsPanel {
 }
 
+.tagLabel {
+    -fx-text-fill: white;
+}
+
 .tag {
     -fx-color-label-visible: white;
     -fx-background-color: blue;

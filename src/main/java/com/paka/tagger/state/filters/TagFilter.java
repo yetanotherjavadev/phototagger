@@ -10,6 +10,7 @@ public class TagFilter implements Filter {
 
     private List<Tag> selectedTags;
 
+
     public TagFilter() {
         this.selectedTags = new ArrayList<>();
     }
@@ -19,7 +20,7 @@ public class TagFilter implements Filter {
     }
 
     @Override
-    public boolean apply() {
-        return false;
+    public FilterType getType() {
+        return FilterType.TAG;
     }
 }
