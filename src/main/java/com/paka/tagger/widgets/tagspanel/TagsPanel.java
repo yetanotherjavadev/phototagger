@@ -45,14 +45,21 @@ public class TagsPanel extends FlowPane {
 
             TagFilter currentState = AppState.get().getAppliedFiltersProperty().getValue();
 
-            if (currentState == null || currentState.getSelectedTags().contains(tag)) return;
+            Set<Tag> newSet;
+            if (currentState != null) {
+                if (currentState.getSelectedTags().contains(tag)) return;
+                newSet = new HashSet<>(currentState.getSelectedTags());
+            } else {
+                newSet = new HashSet<>();
+            }
 
-            Set<Tag> newSet = new HashSet<>(currentState.getSelectedTags());
             newSet.add(tag);
 
             TagFilter newState = new TagFilter(newSet);
 
             AppState.get().setAppliedFilters(newState);
+
+            tagInput.clear();
         }
     }
 

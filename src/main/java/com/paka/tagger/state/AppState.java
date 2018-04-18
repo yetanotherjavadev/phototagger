@@ -17,7 +17,8 @@ public class AppState {
 
     private static final AppState INSTANCE = new AppState();
 
-    private AppState() {}
+    private AppState() {
+    }
 
     public static AppState get() {
         return INSTANCE;
