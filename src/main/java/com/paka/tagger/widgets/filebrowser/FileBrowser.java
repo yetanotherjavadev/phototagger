@@ -13,7 +13,7 @@ import com.paka.tagger.state.filters.Filter;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
-import com.paka.tagger.widgets.filebrowser.items.TreeItemPredicate;
+import com.paka.tagger.widgets.filebrowser.utils.TreeUtils;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -22,11 +22,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
@@ -42,7 +40,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
 
     public FileBrowser() {
         this.scanningDepth = 5;
-        this.lazyScan = true;
+        this.lazyScan = false;
         initTree();
         addSelectionHandler();
         addFilteringHandler();
@@ -82,7 +80,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
         for (Path dir : rootDirectories) {
             FilePathTreeItem treeNode = new FilePathTreeItem(new TreeEntity(dir));
-            rootNode.getChildren().addAll(getChildren(treeNode, scanningDepth));
+            rootNode.getInternalChildren().addAll(TreeUtils.getChildren(treeNode, scanningDepth));
         }
         rootNode.setExpanded(true);
         setData(rootNode);
@@ -122,7 +120,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
                                 if (lazyScan) {
                                     nV.getInternalChildren().add(treeNode);
                                 } else {
-                                    nV.getInternalChildren().addAll(getChildren(treeNode));
+                                    nV.getInternalChildren().addAll(TreeUtils.getChildrenUnlimitedDepth(treeNode));
                                 }
                             }
                         }
@@ -144,11 +142,8 @@ public class FileBrowser extends TreeView<TreeEntity> {
     }
 
     private void filter(List<Filter> filters) {
-        initialTreeRoot.setPredicate(new TreeItemPredicate<TreeEntity>() {
-            @Override
-            public boolean test(TreeItem<TreeEntity> parent, TreeEntity value) {
-                return tagMatch(filters, value); //TODO consider parent value here too
-            }
+        initialTreeRoot.setPredicate((parent, value) -> {
+            return tagMatch(filters, value); //TODO consider parent value here too
         });
     }
 
@@ -172,8 +167,8 @@ public class FileBrowser extends TreeView<TreeEntity> {
     //TODO implement multithreaded scanning
     private void rescan(FilePathTreeItem starting) {
         long start = System.currentTimeMillis();
-        starting.getChildren().clear();
-        starting.getChildren().addAll(getChildren(starting, scanningDepth));
+        starting.getInternalChildren().clear();
+        starting.getInternalChildren().addAll(TreeUtils.getChildren(starting, scanningDepth));
         starting.setExpanded(true);
         long took = System.currentTimeMillis() - start;
         System.out.println("Scanning took: " + took + "ms");
@@ -181,44 +176,6 @@ public class FileBrowser extends TreeView<TreeEntity> {
 
     public void rescanCurrent() {
         rescan(AppState.get().getSelectedNode().get());
-    }
-
-    private List<FilePathTreeItem> getChildren(FilePathTreeItem item) {
-        return getChildren(item, Integer.MAX_VALUE);
-    }
-
-    private List<FilePathTreeItem> getChildren(FilePathTreeItem item, int depth) {
-        List<FilePathTreeItem> result = new ArrayList<>();
-        if (depth == 0) return result;
-        item.setScanned(true);
-
-        Path fullPath = item.getValue().getPathItem().getFullPath();
-        boolean isDirectory = fullPath.toFile().isDirectory();
-
-        if (isDirectory) {
-            DirectoryStream<Path> stream = null;
-            try {
-                System.out.println("Scanning dir: " + fullPath);
-                stream = Files.newDirectoryStream(fullPath);
-            } catch (Exception e) {
-                System.out.println("Can't dig into directory: " + fullPath);
-            }
-            if (stream != null) {
-                for (Path path : stream) {
-                    if (pathSupported(path)) {
-                        TreeEntity treeEntity = new TreeEntity(path);
-                        if (!path.toFile().isDirectory()) {
-                            treeEntity.addTag(new Tag(FileUtils.getFileExt(path)));
-                        }
-                        FilePathTreeItem treeNode = new FilePathTreeItem(treeEntity);
-                        treeNode.getChildren().addAll(getChildren(treeNode, depth - 1));
-                        result.add(treeNode);
-                    }
-                }
-            }
-        }
-
-        return result;
     }
 
     private boolean pathSupported(Path path) {
