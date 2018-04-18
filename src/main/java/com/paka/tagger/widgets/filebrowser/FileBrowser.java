@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeView;
@@ -86,7 +87,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
     }
 
     //re-sets the node at the tree root
-    public void setData(FilePathTreeItem root) {
+    private void setData(FilePathTreeItem root) {
         setRoot(root);
         this.initialTreeRoot = root;
     }
@@ -149,11 +150,11 @@ public class FileBrowser extends TreeView<TreeEntity> {
     //TODO convert to java8 map matcher
     private boolean tagMatch(TagFilter filter, TreeEntity entity) {
         if (filter == null || filter.getSelectedTags().isEmpty()) return true;
-        List<Tag> tags = entity.getTagsAssigned();
+        Set<Tag> tags = entity.getTagsAssigned();
 
         List<Tag> filterTags = filter.getSelectedTags();
         for (Tag filterTag : filterTags) {
-            if (tags != null && tags.contains(filterTag)) return true;
+            if (tags.contains(filterTag)) return true;
         }
 
         return false;

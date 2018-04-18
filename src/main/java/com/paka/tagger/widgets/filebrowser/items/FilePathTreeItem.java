@@ -34,4 +34,6 @@ public class FilePathTreeItem extends FilterableTreeItem<TreeEntity> {
             this.setGraphic(new ImageView(img));
         }
     }
+
+
 }

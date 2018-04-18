@@ -7,7 +7,7 @@
 <fx:root type="MenuBar" xmlns:fx="http://javafx.com/fxml/1">
     <Menu text="File">
         <MenuItem text="Scan Folder" onAction="#performScan"/>
-        <MenuItem text="Save Image"/>
+        <MenuItem text="Tag Folder Content" onAction="#tagAllFolderContents"/>
         <MenuItem text="Test JPG Tag" onAction="#testJPGTag"/>
         <MenuItem text="Clear applied tags" onAction="#removeAllTags"/>
         <SeparatorMenuItem/>

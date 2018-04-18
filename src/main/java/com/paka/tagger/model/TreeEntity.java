@@ -8,7 +8,9 @@ import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 
 @Getter
@@ -17,7 +19,7 @@ public class TreeEntity {
     private PathItem pathItem;
     private ImageFormat format;
     private ImageMetadata metadata;
-    private List<Tag> tagsAssigned;
+    private Set<Tag> tagsAssigned;
     private boolean valid;
     private boolean isDirectory;
 
@@ -39,9 +41,9 @@ public class TreeEntity {
         this.format = ImageFormat.getFormat(fileExt);
     }
 
-    public List<Tag> getTagsAssigned() {
+    public Set<Tag> getTagsAssigned() {
         if (tagsAssigned == null) {
-            tagsAssigned = new ArrayList<>();
+            tagsAssigned = new HashSet<>();
         }
         return tagsAssigned;
     }

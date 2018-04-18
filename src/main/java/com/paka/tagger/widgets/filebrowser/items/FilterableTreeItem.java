@@ -12,8 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
 public class FilterableTreeItem<T> extends TreeItem<T> {
-    private final ObservableList<TreeItem<T>> sourceList;
-    private FilteredList<TreeItem<T>> filteredList;
+    private final ObservableList<FilterableTreeItem<T>> sourceList;
+    private FilteredList<FilterableTreeItem<T>> filteredList;
     private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
 
     public FilterableTreeItem(T value, Node graphics) {
@@ -22,9 +22,7 @@ public class FilterableTreeItem<T> extends TreeItem<T> {
         this.filteredList = new FilteredList<>(this.sourceList);
 
         this.filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> child -> {
-            // Set the predicate of child items to force filtering
-            FilterableTreeItem<T> filterableChild = (FilterableTreeItem<T>) child;
-            filterableChild.setPredicate(this.predicate.get());
+            child.setPredicate(this.predicate.get());
 
             if (this.predicate.get() == null || child.getChildren().size() > 0)
                 return true;
@@ -35,7 +33,7 @@ public class FilterableTreeItem<T> extends TreeItem<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private void setHiddenFieldChildren(ObservableList<TreeItem<T>> list) {
+    private void setHiddenFieldChildren(ObservableList<FilterableTreeItem<T>> list) {
         try { //TODO: remove reflection from here, javafx 8 should allow this
             Field childrenField = TreeItem.class.getDeclaredField("children"); //$NON-NLS-1$
             childrenField.setAccessible(true);
@@ -49,7 +47,7 @@ public class FilterableTreeItem<T> extends TreeItem<T> {
         }
     }
 
-    public ObservableList<TreeItem<T>> getInternalChildren() {
+    public ObservableList<FilterableTreeItem<T>> getInternalChildren() {
         return this.sourceList;
     }
 

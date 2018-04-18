@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 //TODO: change the way of rendering. The item should appear in the details panel iif it is in the metadata
 public class InfoPanel extends VBox {
 
-    private TreeEntity image;
+    private TreeEntity entity;
 
     @FXML
     private KeyValue dateLabel;
@@ -53,30 +53,47 @@ public class InfoPanel extends VBox {
     }
 
     private void setData(TreeEntity entity) {
-        this.image = entity;
+        this.entity = entity;
         render();
     }
 
     private void render() {
-        dateLabel.setValue(image.getMetadata().getDate());
-        makeLabel.setValue(image.getMetadata().getMake());
-        modelLabel.setValue(image.getMetadata().getModel());
-        exposureLabel.setValue(image.getMetadata().getExposure());
-        apertureLabel.setValue(image.getMetadata().getAperture());
-        focalLengthLabel.setValue(image.getMetadata().getFocalLength());
-        isoSpeedLabel.setValue(image.getMetadata().getIsoSpeed());
-        flashLabel.setValue(String.valueOf(image.getMetadata().isFlash()));
+        dateLabel.setValue(entity.getMetadata().getDate());
+        makeLabel.setValue(entity.getMetadata().getMake());
+        modelLabel.setValue(entity.getMetadata().getModel());
+        exposureLabel.setValue(entity.getMetadata().getExposure());
+        apertureLabel.setValue(entity.getMetadata().getAperture());
+        focalLengthLabel.setValue(entity.getMetadata().getFocalLength());
+        isoSpeedLabel.setValue(entity.getMetadata().getIsoSpeed());
+        flashLabel.setValue(String.valueOf(entity.getMetadata().isFlash()));
 
-        if (image.hasTagsAssigned()) {
+        if (entity.hasTagsAssigned()) {
             tagsContainer.getChildren().clear();
-            for (Tag tag : image.getTagsAssigned()) {
+            for (Tag tag : entity.getTagsAssigned()) {
                 tagsContainer.getChildren().add(new TagWidget(tagsContainer, tag, true));
             }
+        } else {
+            tagsContainer.getChildren().clear();
         }
     }
 
+    private void clear() {
+        dateLabel.setValue(null);
+        makeLabel.setValue(null);
+        modelLabel.setValue(null);
+        exposureLabel.setValue(null);
+        apertureLabel.setValue(null);
+        focalLengthLabel.setValue(null);
+        isoSpeedLabel.setValue(null);
+        flashLabel.setValue(null);
+        tagsContainer.getChildren().clear();
+    }
+
     private void showData(TreeEntity entity) {
-        if (entity == null) return;
+        if (entity == null) {
+            clear();
+            return;
+        }
         try {
             setData(entity);
         } catch (Exception e) {
