@@ -4,20 +4,25 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.CheckMenuItem?>
 <fx:root type="MenuBar" xmlns:fx="http://javafx.com/fxml/1">
     <Menu text="File">
         <MenuItem text="Scan Folder" onAction="#performScan"/>
-        <MenuItem text="Tag Folder Content" onAction="#tagAllFolderContents"/>
-        <MenuItem text="Clear applied tags" onAction="#removeAllTags"/>
+        <MenuItem text="Save as..." disable="true"/>
         <SeparatorMenuItem/>
         <MenuItem text="Exit" onAction="#exitAction"/>
     </Menu>
-    <Menu text="Edit">
+    <Menu text="Edit" disable="true">
         <MenuItem text="Rotate" disable="true"/>
         <MenuItem text="Crop" disable="true"/>
     </Menu>
+    <Menu text="Tags">
+        <CheckMenuItem text="AND Tagging Mode" fx:id="taggingModeCheckbox" onAction="#switchCheckMode"/>
+        <MenuItem text="Tag Folder Content" onAction="#tagAllFolderContents"/>
+        <MenuItem text="Clear applied tags" onAction="#removeAllTags"/>
+    </Menu>
     <Menu text="Help">
-        <MenuItem text="Online Manual" visible="false"/>
+        <MenuItem text="Online Manual" disable="true"/>
         <SeparatorMenuItem/>
         <MenuItem text="About" disable="true"/>
     </Menu>

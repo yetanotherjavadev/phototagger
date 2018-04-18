@@ -6,10 +6,9 @@ import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TreeItem;
 import javafx.util.Callback;
@@ -19,6 +18,9 @@ import javafx.util.Callback;
 public class MainMenuBarController extends MenuBar {
 
     private Callback<String, String> scanCallback;
+
+    @FXML
+    private CheckMenuItem taggingModeCheckbox;
 
     public MainMenuBarController() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/MainMenuBar.fxml"));
@@ -39,6 +41,11 @@ public class MainMenuBarController extends MenuBar {
             String scan = scanCallback.call(null);
             System.out.println(scan);
         }
+    }
+
+    @FXML
+    public void switchCheckMode() { //TODO implement switching
+        AppState.get().getAppSettingsProperty().getValue().get().setAndTaggingMode(taggingModeCheckbox.isSelected());
     }
 
     @FXML

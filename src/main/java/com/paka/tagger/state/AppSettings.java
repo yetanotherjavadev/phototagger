@@ -11,6 +11,7 @@ public class AppSettings {
     private String treeTop;
     private boolean resizeableScreen;
     private Integer totalNumberOfImgIndexed;
+    private boolean andTaggingMode = false;
 
     private static AppSettings INSTANCE = new AppSettings();
 

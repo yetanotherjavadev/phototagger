@@ -38,12 +38,7 @@ public class MatchingUtils {
         List<Tag> list1 = new ArrayList<>(first);
         List<Tag> list2 = new ArrayList<>(second);
 
-        Comparator<Tag> cmp = new Comparator<Tag>() {
-            @Override
-            public int compare(Tag o1, Tag o2) {
-                return o1.getText().compareTo(o2.getText());
-            }
-        };
+        Comparator<Tag> cmp = Comparator.comparing(Tag::getText);
 
         list1.sort(cmp);
         list2.sort(cmp);
