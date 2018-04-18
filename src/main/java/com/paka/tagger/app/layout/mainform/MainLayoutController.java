@@ -84,6 +84,14 @@ public class MainLayoutController extends StackPane {
                 return "Tag filter set";
             }
         });
+
+        mainMenu.setRemoveTagCallback(new Callback<String, String>() {
+            @Override
+            public String call(String param) {
+                AppState.get().setAppliedFilters(new ArrayList<>());
+                return "Tag filter removed";
+            }
+        });
     }
 
     private void initTagsPanel() {

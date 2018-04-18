@@ -10,6 +10,7 @@ public class MainMenuBarController extends MenuBar {
 
     private Callback<String, String> scanCallback;
     private Callback<String, String> tagCallback;
+    private Callback<String, String> tagRemoveCallback;
 
     public MainMenuBarController() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/MainMenuBar.fxml"));
@@ -39,11 +40,23 @@ public class MainMenuBarController extends MenuBar {
         }
     }
 
+    @FXML
+    public void removeAllTags() {
+        if (tagRemoveCallback != null) {
+            String result = tagRemoveCallback.call("aaa");
+            System.out.println(result);
+        }
+    }
+
     public void setScanCallback(Callback<String, String> callback) {
         this.scanCallback = callback;
     }
 
     public void setTagCallback(Callback<String, String> callback) {
         this.tagCallback = callback;
+    }
+
+    public void setRemoveTagCallback(Callback<String, String> callback) {
+        this.tagRemoveCallback = callback;
     }
 }

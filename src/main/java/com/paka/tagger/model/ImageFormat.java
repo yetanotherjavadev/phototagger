@@ -8,8 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ImageFormat { //TODO: add specific file info
     JPG("JPG"),
-    JPEG("JPEG"),
-    TIFF("TIFF"),
+    JPEG("JPEG"), //TODO merge into a single one
+    GIF("GIF"),
     BMP("BMP"),
     PNG("PNG"),
     NOT_SUPPORTED("Not supported");

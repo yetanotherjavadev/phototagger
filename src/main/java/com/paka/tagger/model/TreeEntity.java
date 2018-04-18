@@ -19,9 +19,11 @@ public class TreeEntity {
     private ImageMetadata metadata;
     private List<Tag> tagsAssigned;
     private boolean valid;
+    private boolean isDirectory;
 
     public TreeEntity(Path path) {
         this.pathItem = new PathItem(path);
+        this.isDirectory = path.toFile().isDirectory();
         try {
             this.metadata = ImageUtils.getImageMetadata(path);
             this.valid = true; // the item is "valid" if it has metadata and it is "supported"
@@ -56,10 +58,6 @@ public class TreeEntity {
         return getTagsAssigned().remove(tag);
     }
 
-    public void update() {
-        this.valid = true;
-    }
-
     public void clearTags() {
         getTagsAssigned().clear();
     }
@@ -71,7 +69,6 @@ public class TreeEntity {
     public boolean hasTagsAssigned() {
         return tagsAssigned != null && tagsAssigned.size() > 0;
     }
-
 
     @Override //TODO: fix it by changing TreeView Cell rendering
     public String toString() {

@@ -13,7 +13,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FilePathTreeItem extends FilterableTreeItem2<TreeEntity> {
+public class FilePathTreeItem extends FilterableTreeItem<TreeEntity> {
 
     private boolean scanned;
 

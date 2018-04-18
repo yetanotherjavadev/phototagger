@@ -11,16 +11,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Tag {
 
+    private String text;
     private Date createdOn;
     private String createdBy;
-    private String text;
+    private boolean used;
 
     public Tag(String text) {
-        this(new Date(), "ElNinho", text);
+        this(text, new Date(), "ElNinho", false);
     }
 
 
-    @Override
+    @Override //tags now are equal by text only, this should be changed further
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

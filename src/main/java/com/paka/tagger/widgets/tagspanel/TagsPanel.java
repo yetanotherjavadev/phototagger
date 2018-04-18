@@ -20,10 +20,10 @@ public class TagsPanel extends FlowPane {
     }
 
     private List<TagWidget> getDefaultTags() {
-        List<TagWidget> tags = new ArrayList<>(Arrays.asList(new TagWidget(this, "Italy"),
-                new TagWidget(this, "Spain"),
-                new TagWidget(this, "Romania"),
-                new TagWidget(this, "Ukraine")));
+        List<TagWidget> tags = new ArrayList<>(Arrays.asList(new TagWidget(this, "jpg"),
+                new TagWidget(this, "png"),
+                new TagWidget(this, "bmp"),
+                new TagWidget(this, "gif")));
         return tags;
     }
 

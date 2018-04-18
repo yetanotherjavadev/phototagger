@@ -23,9 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
@@ -44,7 +42,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
 
     public FileBrowser() {
         this.scanningDepth = 5;
-        this.lazyScan = false;
+        this.lazyScan = true;
         initTree();
         addSelectionHandler();
         addFilteringHandler();
@@ -98,17 +96,21 @@ public class FileBrowser extends TreeView<TreeEntity> {
 
     private void addSelectionHandler() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Path fullPath = newValue.getValue().getPathItem().getFullPath();
+            if (newValue == null) return; //in case if selection is reset to null
+
+            FilePathTreeItem nV = (FilePathTreeItem) newValue;
+            Path fullPath = nV.getValue().getPathItem().getFullPath();
             System.out.println("Clicked on selected item: " + fullPath);
             boolean isDirectory = fullPath.toFile().isDirectory();
-            if (isDirectory && newValue.isExpanded()) {
-                ImageView iv = (ImageView) newValue.getGraphic();
+            if (isDirectory && nV.isExpanded()) {
+                ImageView iv = (ImageView) nV.getGraphic();
                 iv.setImage(IconProvider.getImage(FOLDER_EXPAND_ICON_PATH));
             }
-            AppState.get().setSelectedNode(newValue);
+            AppState.get().setSelectedNode(nV);
             try {
                 if (isDirectory) {
-                    if (newValue.getChildren().isEmpty()) { //happens on first dir opening
+                    if (!nV.isScanned()) { //should happen only on first dir opening
+                        nV.setScanned(true);
                         DirectoryStream<Path> dir = Files.newDirectoryStream(fullPath);
                         for (Path path : dir) {
                             if (pathSupported(path)) {
@@ -118,11 +120,10 @@ public class FileBrowser extends TreeView<TreeEntity> {
                                 }
                                 FilePathTreeItem treeNode = new FilePathTreeItem(treeEntity);
                                 if (lazyScan) {
-                                    newValue.getChildren().add(treeNode);
+                                    nV.getInternalChildren().add(treeNode);
                                 } else {
-                                    newValue.getChildren().addAll(getChildren(treeNode));
+                                    nV.getInternalChildren().addAll(getChildren(treeNode));
                                 }
-
                             }
                         }
                     }
@@ -146,7 +147,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
         initialTreeRoot.setPredicate(new TreeItemPredicate<TreeEntity>() {
             @Override
             public boolean test(TreeItem<TreeEntity> parent, TreeEntity value) {
-                return tagMatch(filters, value); //TODO consider parent value here
+                return tagMatch(filters, value); //TODO consider parent value here too
             }
         });
     }
@@ -160,7 +161,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
             if (filter instanceof TagFilter) {
                 List<Tag> filterTags = ((TagFilter) filter).getSelectedTags();
                 for (Tag filterTag : filterTags) {
-                    if (tags.contains(filterTag)) return true;
+                    if (tags != null && tags.contains(filterTag)) return true;
                 }
             }
         }
