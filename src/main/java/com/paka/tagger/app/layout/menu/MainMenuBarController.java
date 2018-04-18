@@ -42,15 +42,6 @@ public class MainMenuBarController extends MenuBar {
     }
 
     @FXML
-    public void testJPGTag() {
-        Set<Tag> tags = new HashSet<>();
-        tags.add(new Tag("jpg"));
-        TagFilter tf = new TagFilter(tags);
-
-        AppState.get().setAppliedFilters(tf);
-    }
-
-    @FXML
     public void removeAllTags() {
         AppState.get().setAppliedFilters(new TagFilter());
     }
@@ -58,9 +49,14 @@ public class MainMenuBarController extends MenuBar {
     @FXML
     public void tagAllFolderContents() {
         FilePathTreeItem selectedNode = AppState.get().getSelectedNodeProperty().get();
+        if (selectedNode.getValue().isDirectory()) {
+            String folderName = selectedNode.getValue().getPathItem().getDisplayPath();
+            Tag testTag = new Tag(folderName.toLowerCase());
 
-        Tag testTag = new Tag("test-tag");
-        tagEverything(selectedNode, testTag);
+            tagEverything(selectedNode, testTag);
+        } else { //TODO: create information popups instead of sout logging
+            System.out.println("Folder tagging works only when folder is selected in the tree");
+        }
     }
 
     private void tagEverything(TreeItem<TreeEntity> node, Tag tag) {

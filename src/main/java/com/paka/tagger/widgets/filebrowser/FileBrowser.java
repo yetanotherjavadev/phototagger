@@ -141,10 +141,11 @@ public class FileBrowser extends TreeView<TreeEntity> {
         });
     }
 
-    private void filter(TagFilter filter) {
+    private void filter(TagFilter filter) { //TODO: shouldn't be set to here each time
         initialTreeRoot.setPredicate((parent, value) -> {
             return tagMatch(filter, value); //TODO consider parent value here too
         });
+        getSelectionModel().select(0);
     }
 
     //TODO convert to java8 map matcher

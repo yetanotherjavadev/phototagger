@@ -8,14 +8,13 @@
     <Menu text="File">
         <MenuItem text="Scan Folder" onAction="#performScan"/>
         <MenuItem text="Tag Folder Content" onAction="#tagAllFolderContents"/>
-        <MenuItem text="Test JPG Tag" onAction="#testJPGTag"/>
         <MenuItem text="Clear applied tags" onAction="#removeAllTags"/>
         <SeparatorMenuItem/>
         <MenuItem text="Exit" onAction="#exitAction"/>
     </Menu>
     <Menu text="Edit">
-        <MenuItem text="Rotate"/>
-        <MenuItem text="Crop"/>
+        <MenuItem text="Rotate" disable="true"/>
+        <MenuItem text="Crop" disable="true"/>
     </Menu>
     <Menu text="Help">
         <MenuItem text="Online Manual" visible="false"/>
