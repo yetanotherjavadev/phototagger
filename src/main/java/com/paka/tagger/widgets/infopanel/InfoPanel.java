@@ -90,7 +90,7 @@ public class InfoPanel extends VBox {
     }
 
     private void showData(TreeEntity entity) {
-        if (entity == null) {
+        if (entity == null || entity.isDirectory()) {
             clear();
             return;
         }

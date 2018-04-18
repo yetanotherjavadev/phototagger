@@ -7,9 +7,7 @@ import com.paka.tagger.utils.ImageUtils;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 
@@ -26,14 +24,16 @@ public class TreeEntity {
     public TreeEntity(Path path) {
         this.pathItem = new PathItem(path);
         this.isDirectory = path.toFile().isDirectory();
-        try {
-            this.metadata = ImageUtils.getImageMetadata(path);
-            this.valid = true; // the item is "valid" if it has metadata and it is "supported"
-        } catch (IOException e) {
-            this.valid = false;
-            //TODO: print stack trace
+        if (!isDirectory) {
+            try {
+                this.metadata = ImageUtils.getImageMetadata(path);
+                this.valid = true; // the item is "valid" if it has metadata and it is "supported"
+            } catch (IOException e) {
+                this.valid = false;
+                //TODO: print stack trace
+            }
+            init();
         }
-        init();
     }
 
     private void init() {

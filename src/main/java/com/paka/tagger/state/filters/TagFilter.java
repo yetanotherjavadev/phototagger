@@ -1,21 +1,20 @@
 package com.paka.tagger.state.filters;
 
 import com.paka.tagger.common.model.Tag;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 
 @Getter
 public class TagFilter implements Filter {
 
-    private List<Tag> selectedTags;
-
+    private Set<Tag> selectedTags;
 
     public TagFilter() {
-        this.selectedTags = new ArrayList<>();
+        this.selectedTags = new HashSet<>();
     }
 
-    public TagFilter(List<Tag> tags) {
+    public TagFilter(Set<Tag> tags) {
         this.selectedTags = tags;
     }
 

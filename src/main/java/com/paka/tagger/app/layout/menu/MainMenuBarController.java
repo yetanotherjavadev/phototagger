@@ -6,8 +6,8 @@ import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
@@ -43,7 +43,7 @@ public class MainMenuBarController extends MenuBar {
 
     @FXML
     public void testJPGTag() {
-        List<Tag> tags = new ArrayList<>();
+        Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("jpg"));
         TagFilter tf = new TagFilter(tags);
 

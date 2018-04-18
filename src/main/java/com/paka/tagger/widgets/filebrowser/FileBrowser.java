@@ -152,7 +152,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
         if (filter == null || filter.getSelectedTags().isEmpty()) return true;
         Set<Tag> tags = entity.getTagsAssigned();
 
-        List<Tag> filterTags = filter.getSelectedTags();
+        Set<Tag> filterTags = filter.getSelectedTags();
         for (Tag filterTag : filterTags) {
             if (tags.contains(filterTag)) return true;
         }

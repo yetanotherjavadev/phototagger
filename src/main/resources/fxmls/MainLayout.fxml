@@ -6,7 +6,6 @@
 <?import com.paka.tagger.widgets.renderingarea.RenderingArea?>
 <?import com.paka.tagger.widgets.tagspanel.TagsPanel?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -39,7 +38,6 @@
         </right>
         <bottom>
             <VBox>
-                <Label text="Tags: "/>
                 <TagsPanel fx:id="tagsPanel"/>
             </VBox>
         </bottom>
