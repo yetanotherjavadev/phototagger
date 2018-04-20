@@ -14,7 +14,7 @@ public class MatchingUtils {
     //TODO convert to java8 map matcher
     public static boolean isMatchingAnyTag(TagFilter filter, TreeEntity entity) {
         Set<Tag> tags = entity.getTagsAssigned();
-
+        if (tags == null) return false;
         Set<Tag> filterTags = filter.getSelectedTags();
         for (Tag filterTag : filterTags) {
             if (tags.contains(filterTag)) return true;

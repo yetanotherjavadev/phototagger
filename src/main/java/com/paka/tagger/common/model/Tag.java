@@ -16,10 +16,12 @@ public class Tag {
     private String createdBy;
     private boolean used;
 
+    public Tag() {
+    }
+
     public Tag(String text) {
         this(text, new Date(), "ElNinho", false);
     }
-
 
     @Override //tags now are equal by text only, this should be changed further
     public boolean equals(Object o) {
