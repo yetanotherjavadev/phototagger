@@ -30,10 +30,10 @@ public class MatchingUtils {
 
     public static boolean isMatchingAllTags(TagFilter filter, TreeEntity entity) {
 
-        Set<Tag> tags = entity.getTagsAssigned();
+        Set<Tag> entityTags = entity.getTagsAssigned();
         Set<Tag> filterTags = filter.getSelectedTags();
 
-        return equalTagSets(tags, filterTags);
+        return containsAll(entityTags, filterTags);
     }
 
     public static boolean isMatching(TagFilter filter, TreeEntity entity) {
@@ -56,5 +56,9 @@ public class MatchingUtils {
         list2.sort(cmp);
 
         return Objects.deepEquals(new ArrayList<>(first), new ArrayList<>(second));
+    }
+
+    private static boolean containsAll(Set<Tag> container, Set<Tag> contained) {
+       return container.containsAll(contained);
     }
 }
