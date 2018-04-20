@@ -9,6 +9,7 @@ import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.config.MainAppConfig;
 import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
+import com.paka.tagger.state.TagFilterMode;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.state.matchers.MatchingUtils;
 import com.paka.tagger.utils.FileUtils;
@@ -32,7 +33,7 @@ import javafx.scene.layout.VBox;
 //TODO: add file alternation listener (in case of external file system changes the tree should rebuild itself)
 public class FileBrowser extends TreeView<TreeEntity> {
 
-    private static final String STARTING_DIR = "D:/";
+    private static final String STARTING_DIR = "D:/!temp";
     private FilePathTreeItem initialTreeRoot;
     private boolean lazyScan; //TODO implement fully functional lazy scanning
     private int scanningDepth;
@@ -44,8 +45,6 @@ public class FileBrowser extends TreeView<TreeEntity> {
         addSelectionHandler();
         addFilteringHandler();
     }
-
-    //TODO: implement "scan" feature to hide directories that don't contain images
 
     private void initTree() {
 //        createDefaultRoot();
@@ -61,7 +60,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
         setData(rootNode);
 
         if (!lazyScan) {
-            rescan(rootNode);
+            rescan(rootNode, scanningDepth);
         }
     }
 
@@ -135,20 +134,30 @@ public class FileBrowser extends TreeView<TreeEntity> {
         AppState.get().getAppliedFiltersProperty().addListener(new ChangeListener<TagFilter>() {
             @Override
             public void changed(ObservableValue<? extends TagFilter> observable, TagFilter oldValue, TagFilter newValue) {
-                initialTreeRoot.setPredicate((parent, value) -> {
-                    return MatchingUtils.isMatchingAnyTag(newValue, value); //should I consider using parent value here too?
-                });
+                initialTreeRoot.setPredicate((parent, value) -> MatchingUtils.isMatching(newValue, value));
+                getSelectionModel().select(0);
+            }
+        });
+        AppState.get().getAppSettingsProperty().get().getTaggingModeProperty().addListener(new ChangeListener<TagFilterMode>() {
+            @Override
+            public void changed(ObservableValue<? extends TagFilterMode> observable, TagFilterMode oldValue, TagFilterMode newValue) {
+                TagFilter currentTagFilterApplied = AppState.get().getAppliedFiltersProperty().get();
+                initialTreeRoot.setPredicate((parent, value) -> MatchingUtils.isMatching(currentTagFilterApplied, value));
                 getSelectionModel().select(0);
             }
         });
     }
 
     //TODO implement multithreaded scanning
-    private void rescan(FilePathTreeItem starting) {
+    private void rescan(FilePathTreeItem node) {
+        rescan(node, Integer.MAX_VALUE);
+    }
+
+    private void rescan(FilePathTreeItem node, int depth) {
         long start = System.currentTimeMillis();
-        starting.getInternalChildren().clear();
-        starting.getInternalChildren().addAll(TreeUtils.getChildren(starting, scanningDepth));
-        starting.setExpanded(true);
+        node.getInternalChildren().clear();
+        node.getInternalChildren().addAll(TreeUtils.getChildren(node, depth));
+        node.setExpanded(true);
         long took = System.currentTimeMillis() - start;
         System.out.println("Scanning took: " + took + "ms");
     }

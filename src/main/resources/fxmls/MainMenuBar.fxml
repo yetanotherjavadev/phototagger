@@ -3,9 +3,13 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
 <fx:root type="MenuBar" xmlns:fx="http://javafx.com/fxml/1">
+<fx:define>
+    <ToggleGroup fx:id="filterModeToggleGroup"/>
+</fx:define>
     <Menu text="File">
         <MenuItem text="Scan Folder" onAction="#performScan"/>
         <MenuItem text="Save as..." disable="true"/>
@@ -17,7 +21,10 @@
         <MenuItem text="Crop" disable="true"/>
     </Menu>
     <Menu text="Tags">
-        <CheckMenuItem text="AND Tagging Mode" fx:id="taggingModeCheckbox" onAction="#switchCheckMode"/>
+        <Menu text="AND Tagging Mode" >
+            <RadioMenuItem text="Match Any" fx:id="matchAny" selected="true" toggleGroup="$filterModeToggleGroup" onAction="#switchCheckMode"/>
+            <RadioMenuItem text="Match All" toggleGroup="$filterModeToggleGroup" onAction="#switchCheckMode"/>
+        </Menu>
         <MenuItem text="Tag Folder Content" onAction="#tagAllFolderContents"/>
         <MenuItem text="Clear applied tags" onAction="#removeAllTags"/>
     </Menu>

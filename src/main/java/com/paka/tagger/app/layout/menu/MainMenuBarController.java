@@ -3,6 +3,7 @@ package com.paka.tagger.app.layout.menu;
 import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
+import com.paka.tagger.state.TagFilterMode;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.util.Callback;
 
@@ -20,7 +22,7 @@ public class MainMenuBarController extends MenuBar {
     private Callback<String, String> scanCallback;
 
     @FXML
-    private CheckMenuItem taggingModeCheckbox;
+    private RadioMenuItem matchAny;
 
     public MainMenuBarController() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/MainMenuBar.fxml"));
@@ -45,7 +47,7 @@ public class MainMenuBarController extends MenuBar {
 
     @FXML
     public void switchCheckMode() { //TODO implement switching
-        AppState.get().getAppSettingsProperty().getValue().get().setAndTaggingMode(taggingModeCheckbox.isSelected());
+        AppState.get().getAppSettingsProperty().getValue().setTaggingMode(matchAny.isSelected() ? TagFilterMode.MATCH_ANY : TagFilterMode.MATCH_ALL);
     }
 
     @FXML

@@ -18,6 +18,7 @@ public class AppState {
     private static final AppState INSTANCE = new AppState();
 
     private AppState() {
+        setAppSettings(new AppSettings());
     }
 
     public static AppState get() {
