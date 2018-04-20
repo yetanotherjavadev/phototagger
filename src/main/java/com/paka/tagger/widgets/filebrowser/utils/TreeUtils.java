@@ -54,7 +54,7 @@ public class TreeUtils {
                 for (Path path : stream) {
                     if (predicate.test(path)) {
                         TreeEntity treeEntity = new TreeEntity(path);
-                        if (!path.toFile().isDirectory()) {
+                        if (!treeEntity.isDirectory()) {
                             treeEntity.addTag(new Tag(FileUtils.getFileExt(path)));
                         }
                         FilePathTreeItem treeNode = new FilePathTreeItem(treeEntity);

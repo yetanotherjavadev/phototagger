@@ -8,6 +8,8 @@ import com.paka.tagger.common.graphics.IconProvider;
 import com.paka.tagger.common.model.Tag;
 import com.paka.tagger.config.MainAppConfig;
 import com.paka.tagger.model.TreeEntity;
+import com.paka.tagger.persistence.StorageModelProvider;
+import com.paka.tagger.persistence.model.DataStorageModel;
 import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.TagFilterMode;
 import com.paka.tagger.state.filters.TagFilter;
@@ -115,7 +117,7 @@ public class FileBrowser extends TreeView<TreeEntity> {
                                     treeEntity.addTag(new Tag(FileUtils.getFileExt(path)));
                                 }
                                 FilePathTreeItem treeNode = new FilePathTreeItem(treeEntity);
-                                if (lazyScan) {
+                                if (lazyScan) { //todo do something with this
                                     nV.getInternalChildren().add(treeNode);
                                 } else {
                                     nV.getInternalChildren().addAll(TreeUtils.getChildrenUnlimitedDepth(treeNode));
@@ -160,6 +162,8 @@ public class FileBrowser extends TreeView<TreeEntity> {
         node.setExpanded(true);
         long took = System.currentTimeMillis() - start;
         System.out.println("Scanning took: " + took + "ms");
+
+        StorageModelProvider.getStorage().flush();
     }
 
     public void rescanCurrent() {

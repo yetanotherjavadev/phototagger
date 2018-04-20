@@ -2,6 +2,10 @@ package com.paka.tagger.model;
 
 import com.paka.tagger.common.model.ImageMetadata;
 import com.paka.tagger.common.model.Tag;
+import com.paka.tagger.persistence.StorageModelProvider;
+import com.paka.tagger.persistence.model.DataStorageModel;
+import com.paka.tagger.persistence.model.FileRecord;
+import com.paka.tagger.persistence.utils.CRCUtils;
 import com.paka.tagger.utils.FileUtils;
 import com.paka.tagger.utils.ImageUtils;
 import com.paka.tagger.widgets.filebrowser.items.PathItem;
@@ -12,9 +16,10 @@ import java.util.Set;
 import lombok.Getter;
 
 @Getter
-public class TreeEntity {
+public class TreeEntity { //TODO: link TreeEntitiy to FileRecord based on some property
 
     private PathItem pathItem;
+    private long crc32;
     private ImageFormat format;
     private ImageMetadata metadata;
     private Set<Tag> tagsAssigned;
@@ -26,6 +31,7 @@ public class TreeEntity {
         this.isDirectory = path.toFile().isDirectory();
         if (!isDirectory) {
             try {
+                this.crc32 = CRCUtils.getCRC32Checksum(path);
                 this.metadata = ImageUtils.getImageMetadata(path);
                 this.valid = true; // the item is "valid" if it has metadata and it is "supported"
             } catch (IOException e) {
@@ -33,6 +39,7 @@ public class TreeEntity {
                 //TODO: print stack trace
             }
             init();
+            persist();
         }
     }
 
@@ -41,10 +48,20 @@ public class TreeEntity {
         this.format = ImageFormat.getFormat(fileExt);
     }
 
-    public Set<Tag> getTagsAssigned() {
-        if (tagsAssigned == null) {
-            tagsAssigned = new HashSet<>();
+    private void persist() {
+        DataStorageModel dsm = StorageModelProvider.getStorage();
+        if (dsm.hasRecord(crc32)) {
+            FileRecord fr = dsm.readRecord(crc32);
+            this.tagsAssigned = fr.getTags();
+            if (tagsAssigned == null) tagsAssigned = new HashSet<>();
+        } else {
+            this.tagsAssigned = new HashSet<>();
+            FileRecord fr = FileRecord.ofEntity(this);
+            dsm.writeRecord(fr);
         }
+    }
+
+    public Set<Tag> getTagsAssigned() {
         return tagsAssigned;
     }
 

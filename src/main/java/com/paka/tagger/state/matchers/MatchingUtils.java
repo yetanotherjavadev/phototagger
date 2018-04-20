@@ -5,16 +5,11 @@ import com.paka.tagger.model.TreeEntity;
 import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.TagFilterMode;
 import com.paka.tagger.state.filters.TagFilter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class MatchingUtils {
 
-    private MatchingUtils() {
-    }
+    private MatchingUtils() {}
 
     //TODO convert to java8 map matcher
     public static boolean isMatchingAnyTag(TagFilter filter, TreeEntity entity) {
@@ -29,7 +24,6 @@ public class MatchingUtils {
     }
 
     public static boolean isMatchingAllTags(TagFilter filter, TreeEntity entity) {
-
         Set<Tag> entityTags = entity.getTagsAssigned();
         Set<Tag> filterTags = filter.getSelectedTags();
 
@@ -44,18 +38,13 @@ public class MatchingUtils {
         } else {
             return MatchingUtils.isMatchingAllTags(filter, entity);
         }
+        //add partial match feature (with assignable "matching weights")
     }
 
     private static boolean equalTagSets(Set<Tag> first, Set<Tag> second) {
-        List<Tag> list1 = new ArrayList<>(first);
-        List<Tag> list2 = new ArrayList<>(second);
-
-        Comparator<Tag> cmp = Comparator.comparing(Tag::getText);
-
-        list1.sort(cmp);
-        list2.sort(cmp);
-
-        return Objects.deepEquals(new ArrayList<>(first), new ArrayList<>(second));
+        if (first == null && second == null) return true;
+        if (first == null || second == null) return false;
+        return first.containsAll(second) && second.containsAll(first);
     }
 
     private static boolean containsAll(Set<Tag> container, Set<Tag> contained) {
