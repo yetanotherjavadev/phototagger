@@ -73,6 +73,7 @@ public class TreeUtils {
         return getChildren(item, Integer.MAX_VALUE, getPathPredicate());
     }
 
+    //should get all children as a flat list
     public static List<FilePathTreeItem> getFlatChildrenList(FilePathTreeItem item) {
         List<FilePathTreeItem> result = new ArrayList<>();
 

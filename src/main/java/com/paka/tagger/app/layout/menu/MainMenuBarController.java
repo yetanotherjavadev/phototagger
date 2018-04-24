@@ -9,12 +9,10 @@ import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.util.Callback;
-
 
 //TODO: get rid of callbacks, use native JavaFX event handling mechanism
 public class MainMenuBarController extends MenuBar {
