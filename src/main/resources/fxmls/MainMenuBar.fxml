@@ -31,6 +31,6 @@
     <Menu text="Help">
         <MenuItem text="Online Manual" disable="true"/>
         <SeparatorMenuItem/>
-        <MenuItem text="About" disable="true"/>
+        <MenuItem text="About" onAction="#showInfoPopup"/>
     </Menu>
 </fx:root>

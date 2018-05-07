@@ -6,6 +6,7 @@ import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.widgets.filebrowser.FileBrowser;
 import com.paka.tagger.widgets.infopanel.InfoPanel;
+import com.paka.tagger.widgets.popup.basic.BasicInfoPopup;
 import com.paka.tagger.widgets.renderingarea.RenderingArea;
 import com.paka.tagger.widgets.tagspanel.TagsPanel;
 import java.io.IOException;
@@ -39,6 +40,9 @@ public class MainLayoutController extends StackPane {
     @FXML
     private TagsPanel tagsPanel;
 
+    @FXML //fxml?
+    private BasicInfoPopup infoPopup;
+
     public MainLayoutController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmls/MainLayout.fxml"));
         fxmlLoader.setController(this);
@@ -57,6 +61,13 @@ public class MainLayoutController extends StackPane {
     private void init() {
         initLayouts();
         mainPane.getStyleClass().add("mainPane");
+    }
+
+    private BasicInfoPopup getInfoPopup() {
+        if (infoPopup == null) {
+            infoPopup = new BasicInfoPopup();
+        }
+        return infoPopup;
     }
 
     private void initLayouts() {

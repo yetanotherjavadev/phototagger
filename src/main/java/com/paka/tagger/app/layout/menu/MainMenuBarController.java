@@ -6,6 +6,7 @@ import com.paka.tagger.state.AppState;
 import com.paka.tagger.state.TagFilterMode;
 import com.paka.tagger.state.filters.TagFilter;
 import com.paka.tagger.widgets.filebrowser.items.FilePathTreeItem;
+import com.paka.tagger.widgets.popup.basic.BasicInfoPopup;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,11 +14,15 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.util.Callback;
+import javax.inject.Inject;
 
 //TODO: get rid of callbacks, use native JavaFX event handling mechanism
 public class MainMenuBarController extends MenuBar {
 
     private Callback<String, String> scanCallback;
+
+    @Inject //inject it?
+    private BasicInfoPopup infoPopup;
 
     @FXML
     private RadioMenuItem matchAny;
@@ -40,6 +45,13 @@ public class MainMenuBarController extends MenuBar {
         if (scanCallback != null) {
             String scan = scanCallback.call(null);
             System.out.println(scan);
+        }
+    }
+
+    @FXML
+    public void showInfoPopup() {
+        if (infoPopup != null) {
+            infoPopup.show();
         }
     }
 
